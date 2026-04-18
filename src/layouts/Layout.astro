@@ -1,0 +1,63 @@
+---
+import "leaflet/dist/leaflet.css";
+import "../styles/global.css";
+import { Image } from "astro:assets";
+import logoRed from "../assets/logos/ZFT_logo-02.svg";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Žagarė for today",
+  description = "Žagarės miestelio gidas – žymios vietos, kavinės, parduotuvės ir poilsio zonos.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="lt">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5f0e6" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-dvh bg-paper text-ink antialiased font-sans">
+    <header class="border-b border-ink/15">
+      <div class="mx-auto flex h-14 items-center justify-between px-5 md:px-8">
+        <a
+          href="/"
+          class="flex items-center gap-2.5"
+          aria-label="Žagarė for today – pradžia"
+        >
+          <Image
+            src={logoRed}
+            alt=""
+            class="h-7 w-auto"
+            loading="eager"
+            decoding="sync"
+          />
+          <span class="font-display text-[22px] leading-none text-ink">
+            Žagarė <span class="italic text-brand-600">for today</span>
+          </span>
+        </a>
+        <p class="meta text-right leading-[1.4] whitespace-nowrap">
+          56°21.55958′N<br />
+          23°15.30359′E
+        </p>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

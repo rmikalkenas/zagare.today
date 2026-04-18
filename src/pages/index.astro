@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+import MapExperience from "../components/Map.tsx";
+---
+
+<Layout title="Žagarė for today – miestelio žemėlapis">
+  <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-16">
+    <h1
+      class="font-display not-italic tracking-tight leading-[0.86] text-ink"
+    >
+      <span class="block text-[clamp(3.6rem,15vw,12rem)]">Žagarė</span>
+      <span
+        class="block italic text-[clamp(3.2rem,13vw,10.5rem)] pl-[0.5em] text-ink-soft"
+        >for</span
+      >
+      <span
+        class="block italic text-[clamp(3.6rem,15vw,12rem)] pl-[1.2em] text-brand-600"
+        >today</span
+      >
+    </h1>
+
+    <div class="mt-10 md:mt-16 grid md:grid-cols-12 gap-6 md:gap-10">
+      <div
+        class="md:col-span-5 md:col-start-8 border-l-2 border-brand-600 pl-4 md:pl-5"
+      >
+        <p class="font-sans text-[15px] md:text-[17px] leading-[1.55] text-ink">
+          Vienas originaliausių Lietuvos miestelių — išaugęs iš dviejų atskirų
+          gyvenviečių priešinguose Švėtės krantuose: Senosios Žagarės, minimos
+          nuo XIII a. vidurio, ir Naujosios, atsiradusios XVI amžiuje. Abi
+          dalys į vieną miestą suaugo tik XIX a. pabaigoje, tad iki šiol turime
+          dvi aikštes, du gatvių tinklus ir dvi persidengiančias istorijas.
+          Šis žemėlapis – <em class="font-display italic text-[19px]"
+            >gyvas leidinys</em
+          > nuo ryto kavos iki senojo dvaro.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
+
+  <MapExperience client:only="react" />
+
+  <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
+
+  <footer
+    class="mx-5 md:mx-8 py-6 meta flex flex-col md:flex-row justify-between gap-2"
+  >
+    <span>Žagarė, Joniškio r., Lietuva</span>
+    <span>Asociacija „Žagarės laisvamaniai“</span>
+    <span>© {new Date().getFullYear()} Žagarė for today</span>
+  </footer>
+</Layout>
