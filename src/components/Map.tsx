@@ -16,6 +16,7 @@ import {
   type Point,
 } from "../data/points";
 import CategoryFilter from "./CategoryFilter";
+import MobileFilterSheet from "./MobileFilterSheet";
 import PointPopup from "./PointPopup";
 
 // Must match --color-ink in global.css — Leaflet paints SVG directly.
@@ -80,6 +81,14 @@ export default function MapExperience() {
               </CircleMarker>
             ))}
           </MapContainer>
+
+          <MobileFilterSheet
+            active={active}
+            onToggle={toggle}
+            onReset={reset}
+            visibleCount={visible.length}
+            totalCount={POINTS.length}
+          />
         </div>
 
         <div className="flex items-baseline justify-between gap-4 mt-3 meta">
