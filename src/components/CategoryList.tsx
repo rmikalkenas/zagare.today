@@ -4,6 +4,7 @@ import {
   CATEGORY_KEYS,
   type Category,
 } from "../data/points";
+import CategoryGlyph from "./CategoryGlyph";
 
 interface Props {
   active: Set<Category>;
@@ -30,12 +31,11 @@ export default function CategoryList({ active, onToggle, className }: Props) {
               </span>
               <span
                 aria-hidden
-                className="h-3 w-3 shrink-0 border-[1.5px] transition-transform group-hover:scale-110"
-                style={{
-                  backgroundColor: on ? color : "transparent",
-                  borderColor: color,
-                }}
-              />
+                className="h-4 w-4 shrink-0 inline-flex items-center justify-center transition-transform group-hover:scale-110"
+                style={{ color, opacity: on ? 1 : 0.4 }}
+              >
+                <CategoryGlyph category={c} />
+              </span>
               <span
                 className={`flex-1 font-sans text-[13px] font-medium uppercase tracking-[0.14em] transition-colors ${
                   on ? "text-ink" : "text-ink-soft"

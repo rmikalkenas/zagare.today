@@ -104,9 +104,13 @@ rendering are fully data-driven from these.
 
 ## Map behavior (`src/components/Map.tsx`)
 
-- **Markers are `CircleMarker`** (not icon markers). This is deliberate — it
-  avoids Leaflet's well-known Vite bundling issue with `marker-icon.png`
-  assets and gives us per-category color trivially.
+- **Markers are `Marker` with `L.divIcon`** holding a Lucide-derived SVG
+  glyph on a category-colored circle. The icon nodes live in
+  `src/components/CategoryGlyph.tsx`, which exports both a React component
+  (used by the filter list) and `categoryGlyphSvg(...)` (returns an SVG
+  string for the divIcon HTML). Avoids Leaflet's `marker-icon.png` Vite
+  bundling issue and keeps a single source of truth for category
+  iconography.
 - **Filter behavior is solo-select**: clicking a category isolates it
   (turns off all others); clicking the currently-isolated category restores
   all. Clicking a different category swaps the isolate. A "Rodyti viską"

@@ -77,6 +77,18 @@
   @apply meta underline underline-offset-[3px] decoration-ink/30 transition-colors hover:text-brand-600 hover:decoration-brand-600;
 }
 
+/* Category map markers — colored circle + Lucide-derived icon. */
+.category-marker-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-ink);
+  box-shadow: 0 4px 8px -2px rgba(20, 18, 16, 0.4);
+}
+
 /* Leaflet popup — flatten to editorial card. Relies on Leaflet's CSS being
    imported before this file so overrides win without !important. */
 .leaflet-popup-content-wrapper {

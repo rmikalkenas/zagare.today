@@ -1,8 +1,8 @@
 import L from "leaflet";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  CircleMarker,
   MapContainer,
+  Marker,
   Popup,
   TileLayer,
   useMap,
@@ -15,18 +15,34 @@ import {
   type Category,
   type Point,
 } from "../data/points";
+import { categoryGlyphSvg } from "./CategoryGlyph";
 import CategoryFilter from "./CategoryFilter";
 import MobileFilterSheet from "./MobileFilterSheet";
 import PointPopup from "./PointPopup";
 
-// Must match --color-ink in global.css — Leaflet paints SVG directly.
-const INK = "#141210";
 const FIT_PADDING: [number, number] = [48, 48];
 const FIT_MAX_ZOOM = 16;
 const FLY_DURATION = 0.6;
 const ALL_BOUNDS = L.latLngBounds(
   POINTS.map((p) => [p.lat, p.lng] as [number, number]),
 );
+
+const MARKER_ICONS: Record<Category, L.DivIcon> = Object.fromEntries(
+  CATEGORY_KEYS.map((c) => {
+    const glyph = categoryGlyphSvg(c, 16, 2, "#fff");
+    const html = `<div class="category-marker-bg" style="background-color:${CATEGORIES[c].color}">${glyph}</div>`;
+    return [
+      c,
+      L.divIcon({
+        html,
+        className: "",
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -16],
+      }),
+    ];
+  }),
+) as Record<Category, L.DivIcon>;
 
 export default function MapExperience() {
   const [active, setActive] = useState<Set<Category>>(
@@ -64,21 +80,15 @@ export default function MapExperience() {
               url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             />
             {visible.map((p) => (
-              <CircleMarker
+              <Marker
                 key={p.id}
-                center={[p.lat, p.lng]}
-                radius={8}
-                pathOptions={{
-                  color: INK,
-                  weight: 1.5,
-                  fillColor: CATEGORIES[p.category].color,
-                  fillOpacity: 1,
-                }}
+                position={[p.lat, p.lng]}
+                icon={MARKER_ICONS[p.category]}
               >
                 <Popup maxWidth={280} minWidth={240}>
                   <PointPopup point={p} />
                 </Popup>
-              </CircleMarker>
+              </Marker>
             ))}
           </MapContainer>
 
