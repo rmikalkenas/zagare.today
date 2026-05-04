@@ -51,10 +51,10 @@ metadata as decoration, refined minimalism. Avoid generic "dashboard" or
 
 Brand colors (defined as Tailwind theme tokens in `global.css`):
 
-- `--color-paper` `#f5f0e6` (warm cream, body bg)
-- `--color-paper-dim` `#ebe4d5`
+- `--color-paper` `#eaddca` (warm sand cream, body bg)
+- `--color-paper-dim` `#dccdb3`
 - `--color-ink` `#141210` (near-black warm, text)
-- `--color-ink-soft` `#6a635a` (metadata / soft text)
+- `--color-ink-soft` `#776a55` (metadata / soft text)
 - `--color-brand-600` `#960000` (brand red — matches `ZFT_logo-02.svg`)
   plus a full 50→900 scale.
 
