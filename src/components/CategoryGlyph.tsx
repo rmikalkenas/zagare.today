@@ -111,7 +111,7 @@ interface Props {
 export default function CategoryGlyph({
   category,
   size = 14,
-  strokeWidth = 1.75,
+  strokeWidth = 2.5,
   className,
 }: Props) {
   return (
