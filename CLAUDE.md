@@ -51,10 +51,10 @@ metadata as decoration, refined minimalism. Avoid generic "dashboard" or
 
 Brand colors (defined as Tailwind theme tokens in `global.css`):
 
-- `--color-paper` `#f5f0e6` (warm cream, body bg)
-- `--color-paper-dim` `#ebe4d5`
+- `--color-paper` `#eaddca` (warm sand cream, body bg)
+- `--color-paper-dim` `#dccdb3`
 - `--color-ink` `#141210` (near-black warm, text)
-- `--color-ink-soft` `#6a635a` (metadata / soft text)
+- `--color-ink-soft` `#776a55` (metadata / soft text)
 - `--color-brand-600` `#960000` (brand red — matches `ZFT_logo-02.svg`)
   plus a full 50→900 scale.
 
@@ -104,9 +104,13 @@ rendering are fully data-driven from these.
 
 ## Map behavior (`src/components/Map.tsx`)
 
-- **Markers are `CircleMarker`** (not icon markers). This is deliberate — it
-  avoids Leaflet's well-known Vite bundling issue with `marker-icon.png`
-  assets and gives us per-category color trivially.
+- **Markers are `Marker` with `L.divIcon`** holding a Lucide-derived SVG
+  glyph on a category-colored circle. The icon nodes live in
+  `src/components/CategoryGlyph.tsx`, which exports both a React component
+  (used by the filter list) and `categoryGlyphSvg(...)` (returns an SVG
+  string for the divIcon HTML). Avoids Leaflet's `marker-icon.png` Vite
+  bundling issue and keeps a single source of truth for category
+  iconography.
 - **Filter behavior is solo-select**: clicking a category isolates it
   (turns off all others); clicking the currently-isolated category restores
   all. Clicking a different category swaps the isolate. A "Rodyti viską"

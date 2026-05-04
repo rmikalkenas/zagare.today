@@ -1,14 +1,60 @@
 @import "tailwindcss";
 
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @theme {
   --font-display: "Instrument Serif", ui-serif, Georgia, serif;
   --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-paper: #f5f0e6;
-  --color-paper-dim: #ebe4d5;
+  --color-paper: #eaddca;
+  --color-paper-dim: #dccdb3;
   --color-ink: #141210;
-  --color-ink-soft: #6a635a;
+  --color-ink-soft: #776a55;
 
   --color-brand-50: #fdf2f2;
   --color-brand-100: #fce7e7;
@@ -29,6 +75,18 @@
 
 @utility meta-link {
   @apply meta underline underline-offset-[3px] decoration-ink/30 transition-colors hover:text-brand-600 hover:decoration-brand-600;
+}
+
+/* Category map markers — colored circle + Lucide-derived icon. */
+.category-marker-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-ink);
+  box-shadow: 0 4px 8px -2px rgba(20, 18, 16, 0.4);
 }
 
 /* Leaflet popup — flatten to editorial card. Relies on Leaflet's CSS being
