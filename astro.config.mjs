@@ -8,6 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: "https://zagare.today",
+  output: "static",
   integrations: [react(), sitemap()],
 
   build: {
