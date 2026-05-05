@@ -66,6 +66,11 @@ export default function MobileFilterSheet({
     if (!open) setMounted(false);
   };
 
+  const handleToggle = (c: Category) => {
+    onToggle(c);
+    setOpen(false);
+  };
+
   return (
     <>
       <button
@@ -162,7 +167,7 @@ export default function MobileFilterSheet({
 
             <CategoryList
               active={active}
-              onToggle={onToggle}
+              onToggle={handleToggle}
               className="min-h-0 overflow-y-auto px-5 pb-[max(env(safe-area-inset-bottom),20px)] mt-2"
             />
           </div>
