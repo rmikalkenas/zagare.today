@@ -59,7 +59,7 @@ export const POINTS: Point[] = [
     category: "historical",
     lat: 56.36241805284675,
     lng: 23.26456985578681,
-    images: [img("dvaras-1.jpg"), img("dvaras-2.jpg"), img("dvaras-3.jpg")],
+    images: [img("dvaras-1.webp"), img("dvaras-2.webp"), img("dvaras-3.webp")],
     wikiUrl: "https://lt.wikipedia.org/wiki/Žagarės_dvaras",
   },
   {
@@ -70,7 +70,7 @@ export const POINTS: Point[] = [
     category: "historical",
     lat: 56.36269440634023,
     lng: 23.265733934443134,
-    images: [img("arklininko-namas.jpg")],
+    images: [img("arklininko-namas.webp")],
   },
   {
     id: "svetes-uztvanka",
@@ -80,7 +80,7 @@ export const POINTS: Point[] = [
     category: "attraction",
     lat: 56.364569203108374,
     lng: 23.26271779920254,
-    images: [img("svetes-uztvanka.jpg")],
+    images: [img("svetes-uztvanka.webp")],
   },
   {
     id: "dvaro-vejo-malunas",
@@ -90,7 +90,7 @@ export const POINTS: Point[] = [
     category: "historical",
     lat: 56.36536015148483,
     lng: 23.269762403999096,
-    images: [img("dvaro-malunas.jpg")],
+    images: [img("dvaro-malunas.webp")],
   },
   {
     id: "vysniu-sodas",
@@ -118,7 +118,7 @@ export const POINTS: Point[] = [
     category: "grocery",
     lat: 56.360503839449024,
     lng: 23.25493941121124,
-    images: [img("norfa.jpg")],
+    images: [img("norfa.webp")],
   },
   {
     id: "zirnis",
@@ -127,7 +127,25 @@ export const POINTS: Point[] = [
     category: "grocery",
     lat: 56.359545321180214,
     lng: 23.255916782183437,
-    images: [img("zirnis.jpg")],
+    images: [img("zirnis.webp")],
+  },
+  {
+    id: "parduotuve-kestucio",
+    name: "Parduotuvė",
+    description: "Maisto prekių parduotuvė.",
+    category: "grocery",
+    lat: 56.35720154563918,
+    lng: 23.254974940378105,
+    images: [img("parduotuve-kestucio.webp")],
+  },
+  {
+    id: "delikatesas",
+    name: "Parduotuvė „Delikatesas“",
+    description: "Parduotuvė ir greito maisto užkandinė.",
+    category: "grocery",
+    lat: 56.360176309019124,
+    lng: 23.254334460399903,
+    images: [img("delikatesas.webp")],
   },
   {
     id: "baznycia-1",
@@ -137,7 +155,7 @@ export const POINTS: Point[] = [
     category: "church",
     lat: 56.359292812841616,
     lng: 23.258250511854435,
-    images: [img("baznycia-1.jpg")],
+    images: [img("baznycia-1.webp")],
   },
   {
     id: "baznycia-2",
@@ -147,7 +165,7 @@ export const POINTS: Point[] = [
     category: "church",
     lat: 56.361557298228526,
     lng: 23.25234954942904,
-    images: [img("baznycia-2.jpg")],
+    images: [img("baznycia-2.webp")],
   },
   {
     id: "pesciuju-tiltas",
@@ -157,7 +175,7 @@ export const POINTS: Point[] = [
     category: "attraction",
     lat: 56.36140915226822,
     lng: 23.253390837333903,
-    images: [img("pesciuju-tiltas.jpg")],
+    images: [img("pesciuju-tiltas.webp")],
   },
   {
     id: "atodanga",

@@ -19,6 +19,7 @@ import { categoryGlyphSvg } from "./CategoryGlyph";
 import CategoryFilter from "./CategoryFilter";
 import MobileFilterSheet from "./MobileFilterSheet";
 import PointPopup from "./PointPopup";
+import VisibleCount from "./VisibleCount";
 
 const FIT_PADDING: [number, number] = [48, 48];
 const FIT_MAX_ZOOM = 16;
@@ -66,7 +67,7 @@ export default function MapExperience() {
       <CategoryFilter active={active} onToggle={toggle} onReset={reset} />
 
       <div className="md:col-span-8 lg:col-span-9 order-1 md:order-2 flex flex-col">
-        <div className="relative h-[60vh] md:h-[72vh] border border-ink/30 shadow-[0_24px_48px_-28px_rgba(20,18,16,0.3)]">
+        <div className="relative h-[60dvh] md:h-[72dvh] border border-ink/30 shadow-[0_24px_48px_-28px_rgba(20,18,16,0.3)]">
           <MapContainer
             bounds={ALL_BOUNDS}
             boundsOptions={{ padding: FIT_PADDING, maxZoom: FIT_MAX_ZOOM }}
@@ -84,6 +85,7 @@ export default function MapExperience() {
                 key={p.id}
                 position={[p.lat, p.lng]}
                 icon={MARKER_ICONS[p.category]}
+                title={p.name}
               >
                 <Popup maxWidth={280} minWidth={240}>
                   <PointPopup point={p} />
@@ -104,15 +106,7 @@ export default function MapExperience() {
         <div className="flex items-baseline justify-between gap-4 mt-3 meta">
           <span>N ↑ · Orientacija į šiaurę</span>
           <span>
-            Rodoma{" "}
-            <span className="text-ink tabular-nums">
-              {String(visible.length).padStart(2, "0")}
-            </span>
-            {" / "}
-            <span className="tabular-nums">
-              {String(POINTS.length).padStart(2, "0")}
-            </span>{" "}
-            taškų
+            <VisibleCount visible={visible.length} total={POINTS.length} />
           </span>
         </div>
       </div>

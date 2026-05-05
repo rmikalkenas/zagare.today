@@ -26,7 +26,7 @@ Cloudflare).
 src/
   assets/
     logos/          ZFT_logo-0{1,2,3}.svg  (dark / red / white variants)
-    points/         Photos for map points, ≤1000px max dimension
+    points/         Photos for map points, WebP, ≤700px max dimension
   components/
     Map.tsx         The React island: filter TOC + map + popups
   data/
@@ -92,11 +92,13 @@ interface Point {
 Lithuanian label and the marker/filter swatch color per category.
 
 Adding a point: add a new entry to `POINTS`. If it has photos, `curl` them
-into `src/assets/points/`, resize to ≤1000px max dimension with
-`sips -Z 1000 file.jpg` (Mac), import the image at the top of `points.ts`,
-and reference it in the `images` array. Google-served "`.jpg`" URLs are
-often WebP in disguise — convert them with
-`sips -Z 1000 -s format jpeg in.jpg --out out.jpg`.
+into `src/assets/points/`, resize to ≤700px max dimension and convert to
+**WebP** at quality 80 with `cwebp -q 80 -resize 700 0 in.jpg -o out.webp`
+(Homebrew: `brew install webp`; the `-resize 700 0` form caps width at
+700 — flip to `-resize 0 700` for portrait-oriented sources). Reference the
+file by name via `img("name.webp")` — `points.ts` auto-discovers anything
+under `src/assets/points/` matching `*.{jpg,jpeg,png,webp}`, so no import
+boilerplate.
 
 Adding a category: extend the `Category` union **and** add an entry to
 `CATEGORIES` with `label` (Lithuanian) + `color`. The filter list and marker
