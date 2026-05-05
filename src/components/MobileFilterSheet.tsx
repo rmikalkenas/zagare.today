@@ -1,6 +1,8 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef } from "react";
 import { CATEGORY_KEYS, type Category } from "../data/points";
+import { useDialog } from "../hooks/useDialog";
 import CategoryList from "./CategoryList";
+import VisibleCount from "./VisibleCount";
 
 interface Props {
   active: Set<Category>;
@@ -17,58 +19,26 @@ export default function MobileFilterSheet({
   visibleCount,
   totalCount,
 }: Props) {
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const titleId = useId();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
-  const dialogRef = useRef<HTMLDivElement | null>(null);
   const allOn = active.size === CATEGORY_KEYS.length;
 
-  useEffect(() => {
-    if (open) setMounted(true);
-  }, [open]);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        return;
-      }
-      if (e.key !== "Tab" || !dialogRef.current) return;
-      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-      triggerRef.current?.focus();
-    };
-  }, [mounted]);
-
-  const handlePanelAnimationEnd = () => {
-    if (!open) setMounted(false);
-  };
+  const {
+    open,
+    mounted,
+    openDialog,
+    closeDialog,
+    dialogRef,
+    onAnimationEnd,
+  } = useDialog<HTMLDivElement>({
+    initialFocusRef: closeRef,
+    returnFocusRef: triggerRef,
+  });
 
   const handleToggle = (c: Category) => {
     onToggle(c);
-    setOpen(false);
+    closeDialog();
   };
 
   return (
@@ -76,7 +46,7 @@ export default function MobileFilterSheet({
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openDialog}
         aria-haspopup="dialog"
         aria-expanded={open}
         className="md:hidden absolute top-3 right-3 z-[1100] inline-flex items-center gap-2.5 min-h-[44px] border border-ink bg-paper px-4 shadow-[0_10px_24px_-10px_rgba(20,18,16,0.55)] transition-colors hover:bg-ink hover:text-paper focus-visible:bg-ink focus-visible:text-paper"
@@ -99,7 +69,7 @@ export default function MobileFilterSheet({
           className="md:hidden fixed inset-0 z-[2000]"
         >
           <div
-            onClick={() => setOpen(false)}
+            onClick={closeDialog}
             className={`absolute inset-0 bg-ink/45 ${
               open
                 ? "animate-[fadeIn_180ms_ease-out]"
@@ -108,7 +78,7 @@ export default function MobileFilterSheet({
           />
 
           <div
-            onAnimationEnd={handlePanelAnimationEnd}
+            onAnimationEnd={onAnimationEnd}
             className={`absolute inset-x-0 bottom-0 max-h-[80dvh] flex flex-col border-t border-ink bg-paper ${
               open
                 ? "animate-[slideUp_260ms_cubic-bezier(0.22,1,0.36,1)]"
@@ -124,21 +94,13 @@ export default function MobileFilterSheet({
                   Filtrai
                 </h2>
                 <p className="meta mt-2">
-                  Rodoma{" "}
-                  <span className="text-ink tabular-nums">
-                    {String(visibleCount).padStart(2, "0")}
-                  </span>
-                  {" / "}
-                  <span className="tabular-nums">
-                    {String(totalCount).padStart(2, "0")}
-                  </span>{" "}
-                  taškų
+                  <VisibleCount visible={visibleCount} total={totalCount} />
                 </p>
               </div>
               <button
                 ref={closeRef}
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={closeDialog}
                 aria-label="Uždaryti"
                 className="-mr-2 -mt-2 shrink-0 inline-flex h-11 w-11 items-center justify-center text-ink-soft transition-colors hover:text-ink focus-visible:text-ink"
               >
