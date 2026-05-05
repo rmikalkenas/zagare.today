@@ -130,6 +130,24 @@ export const POINTS: Point[] = [
     images: [img("zirnis.jpg")],
   },
   {
+    id: "parduotuve-kestucio",
+    name: "Parduotuvė",
+    description: "Maisto prekių parduotuvė.",
+    category: "grocery",
+    lat: 56.35720154563918,
+    lng: 23.254974940378105,
+    images: [img("parduotuve-kestucio.jpg")],
+  },
+  {
+    id: "delikatesas",
+    name: "Parduotuvė „Delikatesas“",
+    description: "Parduotuvė ir greito maisto užkandinė.",
+    category: "grocery",
+    lat: 56.360176309019124,
+    lng: 23.254334460399903,
+    images: [img("delikatesas.jpg")],
+  },
+  {
     id: "baznycia-1",
     name: "Pirmoji Šv. apaštalų Petro ir Povilo bažnyčia",
     description:
