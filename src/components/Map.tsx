@@ -66,7 +66,7 @@ export default function MapExperience() {
       <CategoryFilter active={active} onToggle={toggle} onReset={reset} />
 
       <div className="md:col-span-8 lg:col-span-9 order-1 md:order-2 flex flex-col">
-        <div className="relative h-[60vh] md:h-[72vh] border border-ink/30 shadow-[0_24px_48px_-28px_rgba(20,18,16,0.3)]">
+        <div className="relative h-[60dvh] md:h-[72dvh] border border-ink/30 shadow-[0_24px_48px_-28px_rgba(20,18,16,0.3)]">
           <MapContainer
             bounds={ALL_BOUNDS}
             boundsOptions={{ padding: FIT_PADDING, maxZoom: FIT_MAX_ZOOM }}
@@ -85,7 +85,6 @@ export default function MapExperience() {
                 position={[p.lat, p.lng]}
                 icon={MARKER_ICONS[p.category]}
                 title={p.name}
-                alt={p.name}
               >
                 <Popup maxWidth={280} minWidth={240}>
                   <PointPopup point={p} />
