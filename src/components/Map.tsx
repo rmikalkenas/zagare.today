@@ -84,6 +84,8 @@ export default function MapExperience() {
                 key={p.id}
                 position={[p.lat, p.lng]}
                 icon={MARKER_ICONS[p.category]}
+                title={p.name}
+                alt={p.name}
               >
                 <Popup maxWidth={280} minWidth={240}>
                   <PointPopup point={p} />
