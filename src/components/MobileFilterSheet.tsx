@@ -34,6 +34,7 @@ export default function MobileFilterSheet({
   } = useDialog<HTMLDivElement>({
     initialFocusRef: closeRef,
     returnFocusRef: triggerRef,
+    closeAnimationName: "slideDown",
   });
 
   const handleToggle = (c: Category) => {

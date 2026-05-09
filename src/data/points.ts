@@ -57,8 +57,8 @@ export const POINTS: Point[] = [
     description:
       "XIX a. architektūrinis ansamblis Naujosios Žagarės pakraštyje su neoklasicistiniais rūmais, žirgynu ir 72 ha peizažiniu parku, kurį suprojektavo vokietis Georgas Kuphaltas. Dabartinius rūmus 1857 m. pastatė Dmitrijus Naryškinas.",
     category: "historical",
-    lat: 56.36241805284675,
-    lng: 23.26456985578681,
+    lat: 56.362418,
+    lng: 23.26457,
     images: [img("dvaras-1.webp"), img("dvaras-2.webp"), img("dvaras-3.webp")],
     wikiUrl: "https://lt.wikipedia.org/wiki/Žagarės_dvaras",
   },
@@ -68,8 +68,8 @@ export const POINTS: Point[] = [
     description:
       "Istorinis XIX a. pastatas Žagarės dvaro ansamblyje, priklausęs dvaro arklininkui.",
     category: "historical",
-    lat: 56.36269440634023,
-    lng: 23.265733934443134,
+    lat: 56.362694,
+    lng: 23.265734,
     images: [img("arklininko-namas.webp")],
   },
   {
@@ -78,8 +78,8 @@ export const POINTS: Point[] = [
     description:
       "Užtvanka ant Švėtės upės, formuojanti ramų tvenkinį netoli Žagarės dvaro – populiari vieta pasivaikščiojimams.",
     category: "attraction",
-    lat: 56.364569203108374,
-    lng: 23.26271779920254,
+    lat: 56.364569,
+    lng: 23.262718,
     images: [img("svetes-uztvanka.webp")],
   },
   {
@@ -88,8 +88,8 @@ export const POINTS: Point[] = [
     description:
       "Mūrinis XIX a. vėjo malūnas, priklausantis Žagarės dvaro ansambliui – vienas iš nedaugelio Lietuvoje išlikusių tokio tipo malūnų.",
     category: "historical",
-    lat: 56.36536015148483,
-    lng: 23.269762403999096,
+    lat: 56.36536,
+    lng: 23.269762,
     images: [img("dvaro-malunas.webp")],
   },
   {
@@ -98,8 +98,8 @@ export const POINTS: Point[] = [
     description:
       "Tradicinis Žagarės simbolis – vyšnių sodas, kuriam skirta kasmetinė Vyšnių šventė, vykstanti liepos mėnesį.",
     category: "attraction",
-    lat: 56.369117449696894,
-    lng: 23.26876957928367,
+    lat: 56.369117,
+    lng: 23.26877,
   },
   {
     id: "puodu-namas",
@@ -107,8 +107,8 @@ export const POINTS: Point[] = [
     description:
       "Neįprastas buvusios žydų parduotuvės pastatas, kurio sienos ir dalis stogo apkabinėti puodais. Viduje – vertinga senienų kolekcija, tarp jų Žagarėje rasta Tora ir archeologinių artefaktų.",
     category: "attraction",
-    lat: 56.361398353607925,
-    lng: 23.25018538431105,
+    lat: 56.361398,
+    lng: 23.250185,
   },
   {
     id: "norfa",
@@ -116,8 +116,8 @@ export const POINTS: Point[] = [
     description:
       "Lietuviškas prekybos tinklas – kasdieninės maisto ir buities prekės.",
     category: "grocery",
-    lat: 56.360503839449024,
-    lng: 23.25493941121124,
+    lat: 56.360504,
+    lng: 23.254939,
     images: [img("norfa.webp")],
   },
   {
@@ -125,8 +125,8 @@ export const POINTS: Point[] = [
     name: "Žirnis",
     description: "Vietinė maisto ir kasdienių prekių parduotuvė.",
     category: "grocery",
-    lat: 56.359545321180214,
-    lng: 23.255916782183437,
+    lat: 56.359545,
+    lng: 23.255917,
     images: [img("zirnis.webp")],
   },
   {
@@ -134,8 +134,8 @@ export const POINTS: Point[] = [
     name: "Parduotuvė",
     description: "Maisto prekių parduotuvė.",
     category: "grocery",
-    lat: 56.35720154563918,
-    lng: 23.254974940378105,
+    lat: 56.357202,
+    lng: 23.254975,
     images: [img("parduotuve-kestucio.webp")],
   },
   {
@@ -143,8 +143,8 @@ export const POINTS: Point[] = [
     name: "Parduotuvė „Delikatesas“",
     description: "Parduotuvė ir greito maisto užkandinė.",
     category: "grocery",
-    lat: 56.360176309019124,
-    lng: 23.254334460399903,
+    lat: 56.360176,
+    lng: 23.254334,
     images: [img("delikatesas.webp")],
   },
   {
@@ -153,8 +153,8 @@ export const POINTS: Point[] = [
     description:
       "Viena iš dviejų Žagarės katalikų bažnyčių, pavadintų Šv. apaštalų Petro ir Povilo vardu.",
     category: "church",
-    lat: 56.359292812841616,
-    lng: 23.258250511854435,
+    lat: 56.359293,
+    lng: 23.258251,
     images: [img("baznycia-1.webp")],
   },
   {
@@ -163,8 +163,8 @@ export const POINTS: Point[] = [
     description:
       "Antroji Žagarės Šv. apaštalų Petro ir Povilo katalikų bažnyčia, kitame miestelio gale.",
     category: "church",
-    lat: 56.361557298228526,
-    lng: 23.25234954942904,
+    lat: 56.361557,
+    lng: 23.25235,
     images: [img("baznycia-2.webp")],
   },
   {
@@ -173,8 +173,8 @@ export const POINTS: Point[] = [
     description:
       "Pėsčiųjų tiltas per Švėtės upę, jungiantis abi miestelio puses.",
     category: "attraction",
-    lat: 56.36140915226822,
-    lng: 23.253390837333903,
+    lat: 56.361409,
+    lng: 23.253391,
     images: [img("pesciuju-tiltas.webp")],
   },
   {
@@ -183,8 +183,8 @@ export const POINTS: Point[] = [
     description:
       "Valstybinės reikšmės geologinis paminklas – dolomito sluoksnių atodanga, susiformavusi devono periode prieš 360 mln. metų. Iki 1964 m. čia veikė dolomito karjeras.",
     category: "attraction",
-    lat: 56.36507962561135,
-    lng: 23.25697684713225,
+    lat: 56.36508,
+    lng: 23.256977,
     wikiUrl: "https://lt.wikipedia.org/wiki/Žagarės_atodanga",
   },
   {
@@ -192,16 +192,16 @@ export const POINTS: Point[] = [
     name: "Žagarės miesto aikštė",
     description: "Centrinė miestelio aikštė – istorinė Žagarės turgaus vieta.",
     category: "attraction",
-    lat: 56.359376959195224,
-    lng: 23.255049939953384,
+    lat: 56.359377,
+    lng: 23.25505,
   },
   {
     id: "vaistine",
     name: "Vaistinė",
     description: "Miestelio vaistinė.",
     category: "pharmacy",
-    lat: 56.359009708226104,
-    lng: 23.254661654564515,
+    lat: 56.35901,
+    lng: 23.254662,
   },
   {
     id: "sinagogu-kompleksas",
@@ -209,8 +209,8 @@ export const POINTS: Point[] = [
     description:
       "Išlikę XIX a. sinagogų pastatai – svarbi Žagarės žydų bendruomenės paveldo dalis.",
     category: "attraction",
-    lat: 56.358102058508955,
-    lng: 23.255239347497735,
+    lat: 56.358102,
+    lng: 23.255239,
   },
   {
     id: "beigeliai",
@@ -218,8 +218,8 @@ export const POINTS: Point[] = [
     description:
       "Vietinė beigelių kepykla. Veikia tik kartą per mėnesį – pasiteiraukite vietinių.",
     category: "food",
-    lat: 56.35890100292772,
-    lng: 23.251630939381194,
+    lat: 56.358901,
+    lng: 23.251631,
     instagramUrl: "https://www.instagram.com/zagares_beigeliai",
   },
   {
@@ -227,16 +227,16 @@ export const POINTS: Point[] = [
     name: "Dolce Vita Pizza",
     description: "Pica ir desertai. Veikia tik savaitgaliais.",
     category: "food",
-    lat: 56.35871686665226,
-    lng: 23.24559219517128,
+    lat: 56.358717,
+    lng: 23.245592,
   },
   {
     id: "craftsmen-on-the-road",
     name: "Craftsmen On The Road",
     description: "Vietinių amatininkų studija ir parduotuvė.",
     category: "crafts",
-    lat: 56.358814680963874,
-    lng: 23.246142811910758,
+    lat: 56.358815,
+    lng: 23.246143,
   },
   {
     id: "piliakalnis",
@@ -244,8 +244,8 @@ export const POINTS: Point[] = [
     description:
       "I tūkstantmečio viduryje įrengtas piliakalnis – archeologinis paminklas Žagarės pakraštyje.",
     category: "attraction",
-    lat: 56.35708828252541,
-    lng: 23.230842667195425,
+    lat: 56.357088,
+    lng: 23.230843,
   },
   {
     id: "ozas",
@@ -253,8 +253,8 @@ export const POINTS: Point[] = [
     description:
       "Gamtos paminklas – ledyninis kalvagūbris (ozas), susiformavęs paskutinio ledynmečio pabaigoje.",
     category: "attraction",
-    lat: 56.35644291483417,
-    lng: 23.229181504438156,
+    lat: 56.356443,
+    lng: 23.229182,
   },
   {
     id: "ozo-takas",
@@ -262,16 +262,16 @@ export const POINTS: Point[] = [
     description:
       "Pažintinis takas, vedantis per Žagarės ozo kalvagūbrį ir apylinkių miškus.",
     category: "hiking",
-    lat: 56.353594679266706,
-    lng: 23.223893154848408,
+    lat: 56.357763,
+    lng: 23.231492,
   },
   {
     id: "poilsio-erdve",
     name: "Poilsio erdvė",
     description: "Poilsio ir stovyklavimo vieta gamtoje netoli Žagarės.",
     category: "camping",
-    lat: 56.350831426586076,
-    lng: 23.22433794544309,
+    lat: 56.350831,
+    lng: 23.224338,
   },
 ];
 
