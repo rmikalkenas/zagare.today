@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { CATEGORIES, type Point } from "../data/points";
+import { getTrack } from "../data/tracks";
 
 interface Props {
   point: Point;
@@ -11,6 +12,7 @@ export default function PointPopup({ point }: Props) {
   const [index, setIndex] = useState(0);
   const current = images[index];
   const hasMany = images.length > 1;
+  const track = getTrack(point.id);
 
   const prev = () =>
     setIndex((i) => (i - 1 + images.length) % images.length);
@@ -66,6 +68,16 @@ export default function PointPopup({ point }: Props) {
       <p className="text-[13px] leading-[1.55] text-ink/80">
         {point.description}
       </p>
+      {track && (
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft mt-2">
+          Ilgis ·{" "}
+          {track.lengthKm.toLocaleString("lt-LT", {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+          })}{" "}
+          km
+        </p>
+      )}
       {(point.wikiUrl || point.instagramUrl) && (
         <div className="mt-3 flex flex-col gap-1.5">
           {point.wikiUrl && (

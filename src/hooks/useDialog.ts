@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type AnimationEvent,
+  type RefObject,
+} from "react";
 
 interface Options {
   initialFocusRef?: RefObject<HTMLElement | null>;
   returnFocusRef?: RefObject<HTMLElement | null>;
+  closeAnimationName?: string;
 }
 
 interface DialogState<T extends HTMLElement> {
@@ -11,7 +18,7 @@ interface DialogState<T extends HTMLElement> {
   openDialog: () => void;
   closeDialog: () => void;
   dialogRef: RefObject<T | null>;
-  onAnimationEnd: () => void;
+  onAnimationEnd: (e: AnimationEvent<T>) => void;
 }
 
 // `open` is the intent flag (drives slide-in vs. slide-out classes); `mounted`
@@ -20,7 +27,7 @@ interface DialogState<T extends HTMLElement> {
 export function useDialog<T extends HTMLElement = HTMLElement>(
   options: Options = {},
 ): DialogState<T> {
-  const { initialFocusRef, returnFocusRef } = options;
+  const { initialFocusRef, returnFocusRef, closeAnimationName } = options;
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dialogRef = useRef<T | null>(null);
@@ -68,7 +75,11 @@ export function useDialog<T extends HTMLElement = HTMLElement>(
     openDialog: () => setOpen(true),
     closeDialog: () => setOpen(false),
     dialogRef,
-    onAnimationEnd: () => {
+    onAnimationEnd: (e: AnimationEvent<T>) => {
+      // Only react to the dialog's own close animation, not animations
+      // bubbling up from descendants.
+      if (e.target !== e.currentTarget) return;
+      if (closeAnimationName && e.animationName !== closeAnimationName) return;
       if (!open) setMounted(false);
     },
   };
