@@ -9,7 +9,20 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: "https://zagare.today",
   output: "static",
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      changefreq: "weekly",
+      priority: 0.7,
+      lastmod: new Date(),
+      serialize(item) {
+        if (item.url === "https://zagare.today/") {
+          item.priority = 1.0;
+        }
+        return item;
+      },
+    }),
+  ],
 
   build: {
     assets: "_assets",

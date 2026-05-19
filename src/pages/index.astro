@@ -1,9 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import MapExperience from "../components/Map.tsx";
-import { POINTS } from "../data/points";
+import {
+  CATEGORIES,
+  CATEGORY_KEYS,
+  POINTS,
+  type Category,
+} from "../data/points";
 
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+const placeId = `${siteOrigin}/#place`;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -18,6 +24,7 @@ const structuredData = {
         "@type": "TouristAttraction",
         name: p.name,
         description: p.description,
+        containedInPlace: { "@id": placeId },
         geo: {
           "@type": "GeoCoordinates",
           latitude: p.lat,
@@ -31,9 +38,15 @@ const structuredData = {
     };
   }),
 };
+
+const pointsByCategory = CATEGORY_KEYS.map((c: Category) => ({
+  key: c,
+  label: CATEGORIES[c].label,
+  items: POINTS.filter((p) => p.category === c),
+})).filter((g) => g.items.length > 0);
 ---
 
-<Layout title="Žagarė for today – miestelio žemėlapis">
+<Layout title="Žagarė for today - miestelio žemėlapis">
   <script
     type="application/ld+json"
     set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
@@ -52,21 +65,26 @@ const structuredData = {
         class="block italic text-[clamp(3.6rem,15vw,12rem)] pl-[1.2em] text-brand-600"
         >today</span
       >
+      <span class="sr-only">
+        : interaktyvus Žagarės miestelio žemėlapis, lankytinos vietos ir
+        gidas
+      </span>
     </h1>
 
+    <h2 class="sr-only">Apie Žagarę</h2>
     <div class="mt-10 md:mt-16 grid md:grid-cols-12 gap-6 md:gap-10">
       <div
         class="md:col-span-5 md:col-start-8 border-l-2 border-brand-600 pl-4 md:pl-5"
       >
         <p class="font-sans text-[15px] md:text-[17px] leading-[1.55] text-ink">
-          Vienas originaliausių Lietuvos miestelių — išaugęs iš dviejų atskirų
-          gyvenviečių priešinguose Švėtės krantuose: Senosios Žagarės, minimos
-          nuo XIII a. vidurio, ir Naujosios, atsiradusios XVI amžiuje. Abi
-          dalys į vieną miestą suaugo tik XIX a. pabaigoje, tad iki šiol turime
-          dvi aikštes, du gatvių tinklus ir dvi persidengiančias istorijas.
-          Šis žemėlapis – <em class="font-display italic text-[19px]"
-            >gyvas leidinys</em
-          > nuo ryto kavos iki senojo dvaro.
+          Miestelis Lietuvos šiaurėje, prie pat Latvijos sienos - augęs iš
+          dviejų gyvenviečių priešinguose Švėtės krantuose. Dvi aikštės, dvi
+          istorijos, vienas miestas. Šiandien Žagarę toliau kuria pati
+          bendruomenė - talkomis, atvirais kiemais, vyšnių sodais, naujomis
+          idėjomis ant senų pamatų. Šis leidinys - <em
+            class="font-display italic text-[19px]">gyvas</em
+          >: renkame vietas, klausomės žmonių, užrašome tai, kas dar tik
+          gimsta.
         </p>
       </div>
     </div>
@@ -74,6 +92,7 @@ const structuredData = {
 
   <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
 
+  <h2 class="sr-only">Žagarės žemėlapis ir lankytinos vietos</h2>
   <MapExperience client:only="react">
     <div
       slot="fallback"
@@ -83,13 +102,57 @@ const structuredData = {
     </div>
   </MapExperience>
 
+  <section class="sr-only" aria-label="Visos lankytinos vietos">
+    <h2>Žagarės lankytinos vietos pagal kategoriją</h2>
+    {
+      pointsByCategory.map((group) => (
+        <section>
+          <h3>{group.label}</h3>
+          <ul>
+            {group.items.map((p) => (
+              <li>
+                <strong>{p.name}</strong>. {p.description}
+                {" "}
+                <span>
+                  Koordinatės: {p.lat.toFixed(6)}, {p.lng.toFixed(6)}.
+                </span>
+                {p.wikiUrl && (
+                  <span>
+                    {" "}
+                    <a href={p.wikiUrl} rel="noopener noreferrer">
+                      Wikipedia
+                    </a>
+                    .
+                  </span>
+                )}
+                {p.instagramUrl && (
+                  <span>
+                    {" "}
+                    <a href={p.instagramUrl} rel="noopener noreferrer">
+                      Instagram
+                    </a>
+                    .
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </section>
+
   <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
 
   <footer
     class="mx-5 md:mx-8 py-6 meta flex flex-col md:flex-row justify-between gap-2"
   >
     <span>Žagarė, Joniškio r., Lietuva</span>
-    <span>Asociacija „Žagarės laisvamaniai“</span>
+    <a
+      href="/kontaktai"
+      class="hover:text-brand-600 transition-colors"
+      >Asociacija „Žagarės laisvamaniai“</a
+    >
     <span>© {new Date().getFullYear()} Žagarė for today</span>
   </footer>
 </Layout>

@@ -1,6 +1,6 @@
 import type { ImageMetadata } from "astro";
 
-// Auto-discover images from src/assets/points/. Reference by filename only —
+// Auto-discover images from src/assets/points/. Reference by filename only -
 // no per-image import boilerplate when adding new points.
 const pointImages = import.meta.glob<{ default: ImageMetadata }>(
   "../assets/points/*.{jpg,jpeg,png,webp}",
@@ -76,7 +76,7 @@ export const POINTS: Point[] = [
     id: "svetes-uztvanka",
     name: "Švėtės upės užtvanka",
     description:
-      "Užtvanka ant Švėtės upės, formuojanti ramų tvenkinį netoli Žagarės dvaro – populiari vieta pasivaikščiojimams.",
+      "Užtvanka ant Švėtės upės, formuojanti ramų tvenkinį netoli Žagarės dvaro - populiari vieta pasivaikščiojimams.",
     category: "attraction",
     lat: 56.364569,
     lng: 23.262718,
@@ -86,7 +86,7 @@ export const POINTS: Point[] = [
     id: "dvaro-vejo-malunas",
     name: "Žagarės dvaro vėjo malūnas",
     description:
-      "Mūrinis XIX a. vėjo malūnas, priklausantis Žagarės dvaro ansambliui – vienas iš nedaugelio Lietuvoje išlikusių tokio tipo malūnų.",
+      "Mūrinis XIX a. vėjo malūnas, priklausantis Žagarės dvaro ansambliui - vienas iš nedaugelio Lietuvoje išlikusių tokio tipo malūnų.",
     category: "historical",
     lat: 56.36536,
     lng: 23.269762,
@@ -96,7 +96,7 @@ export const POINTS: Point[] = [
     id: "vysniu-sodas",
     name: "Žagarės vyšnių sodas",
     description:
-      "Tradicinis Žagarės simbolis – vyšnių sodas, kuriam skirta kasmetinė Vyšnių šventė, vykstanti liepos mėnesį.",
+      "Tradicinis Žagarės simbolis - vyšnių sodas, kuriam skirta kasmetinė Vyšnių šventė, vykstanti liepos mėnesį.",
     category: "attraction",
     lat: 56.369117,
     lng: 23.26877,
@@ -105,7 +105,7 @@ export const POINTS: Point[] = [
     id: "puodu-namas",
     name: "Edmundo Vaičiulio puodų namas",
     description:
-      "Neįprastas buvusios žydų parduotuvės pastatas, kurio sienos ir dalis stogo apkabinėti puodais. Viduje – vertinga senienų kolekcija, tarp jų Žagarėje rasta Tora ir archeologinių artefaktų.",
+      "Neįprastas buvusios žydų parduotuvės pastatas, kurio sienos ir dalis stogo apkabinėti puodais. Viduje - vertinga senienų kolekcija, tarp jų Žagarėje rasta Tora ir archeologinių artefaktų.",
     category: "attraction",
     lat: 56.361398,
     lng: 23.250185,
@@ -114,7 +114,7 @@ export const POINTS: Point[] = [
     id: "norfa",
     name: "Norfa",
     description:
-      "Lietuviškas prekybos tinklas – kasdieninės maisto ir buities prekės.",
+      "Lietuviškas prekybos tinklas - kasdieninės maisto ir buities prekės.",
     category: "grocery",
     lat: 56.360504,
     lng: 23.254939,
@@ -181,7 +181,7 @@ export const POINTS: Point[] = [
     id: "atodanga",
     name: "Žagarės atodanga",
     description:
-      "Valstybinės reikšmės geologinis paminklas – dolomito sluoksnių atodanga, susiformavusi devono periode prieš 360 mln. metų. Iki 1964 m. čia veikė dolomito karjeras.",
+      "Valstybinės reikšmės geologinis paminklas - dolomito sluoksnių atodanga, susiformavusi devono periode prieš 360 mln. metų. Iki 1964 m. čia veikė dolomito karjeras.",
     category: "attraction",
     lat: 56.36508,
     lng: 23.256977,
@@ -190,7 +190,7 @@ export const POINTS: Point[] = [
   {
     id: "miesto-aikste",
     name: "Žagarės miesto aikštė",
-    description: "Centrinė miestelio aikštė – istorinė Žagarės turgaus vieta.",
+    description: "Centrinė miestelio aikštė - istorinė Žagarės turgaus vieta.",
     category: "attraction",
     lat: 56.359377,
     lng: 23.25505,
@@ -207,7 +207,7 @@ export const POINTS: Point[] = [
     id: "sinagogu-kompleksas",
     name: "Sinagogų kompleksas",
     description:
-      "Išlikę XIX a. sinagogų pastatai – svarbi Žagarės žydų bendruomenės paveldo dalis.",
+      "Išlikę XIX a. sinagogų pastatai - svarbi Žagarės žydų bendruomenės paveldo dalis.",
     category: "attraction",
     lat: 56.358102,
     lng: 23.255239,
@@ -216,7 +216,7 @@ export const POINTS: Point[] = [
     id: "beigeliai",
     name: "Žagarės Beigeliai",
     description:
-      "Vietinė beigelių kepykla. Veikia tik kartą per mėnesį – pasiteiraukite vietinių.",
+      "Vietinė beigelių kepykla. Veikia tik kartą per mėnesį - pasiteiraukite vietinių.",
     category: "food",
     lat: 56.358901,
     lng: 23.251631,
@@ -242,7 +242,7 @@ export const POINTS: Point[] = [
     id: "piliakalnis",
     name: "Žagarės I piliakalnis",
     description:
-      "I tūkstantmečio viduryje įrengtas piliakalnis – archeologinis paminklas Žagarės pakraštyje.",
+      "I tūkstantmečio viduryje įrengtas piliakalnis - archeologinis paminklas Žagarės pakraštyje.",
     category: "attraction",
     lat: 56.357088,
     lng: 23.230843,
@@ -251,7 +251,7 @@ export const POINTS: Point[] = [
     id: "ozas",
     name: "Žagarės ozas",
     description:
-      "Gamtos paminklas – ledyninis kalvagūbris (ozas), susiformavęs paskutinio ledynmečio pabaigoje.",
+      "Gamtos paminklas - ledyninis kalvagūbris (ozas), susiformavęs paskutinio ledynmečio pabaigoje.",
     category: "attraction",
     lat: 56.356443,
     lng: 23.229182,

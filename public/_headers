@@ -1,11 +1,12 @@
 # Security headers applied to every response
 /*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: browsing-topics=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.basemaps.cartocdn.com; font-src 'self' data:; connect-src 'self' https://*.basemaps.cartocdn.com; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
 
-# Hashed build assets — immutable, cache forever
+# Hashed build assets - immutable, cache forever
 /_assets/*
   Cache-Control: public, max-age=31536000, immutable
