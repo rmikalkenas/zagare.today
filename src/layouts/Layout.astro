@@ -16,7 +16,7 @@ interface Props {
 
 const {
   title = "Žagarė for today",
-  description = "Žagarės miestelio gidas – žymios vietos, kavinės, parduotuvės ir poilsio zonos.",
+  description = "Žagarės miestelio gidas - žymios vietos, kavinės, parduotuvės ir poilsio zonos.",
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -58,7 +58,7 @@ const ogImage = new URL("/og.png", Astro.site).toString();
         <a
           href="/"
           class="flex items-center gap-2.5"
-          aria-label="Žagarė for today – pradžia"
+          aria-label="Žagarė for today - pradžia"
         >
           <Image
             src={logoRed}
@@ -71,10 +71,23 @@ const ogImage = new URL("/og.png", Astro.site).toString();
             Žagarė <span class="italic text-brand-600">for today</span>
           </span>
         </a>
-        <p class="meta text-right leading-[1.4] whitespace-nowrap">
-          56°21.55958′N<br />
-          23°15.30359′E
-        </p>
+        <div class="flex items-center gap-5 md:gap-8">
+          <nav aria-label="Pagrindinė navigacija">
+            <a
+              href="/kontaktai"
+              class="meta hover:text-brand-600 transition-colors"
+              aria-current={Astro.url.pathname === "/kontaktai"
+                ? "page"
+                : undefined}
+            >
+              Kontaktai
+            </a>
+          </nav>
+          <p class="meta text-right leading-[1.4] whitespace-nowrap hidden sm:block">
+            56°21.55958′N<br />
+            23°15.30359′E
+          </p>
+        </div>
       </div>
     </header>
     <main>

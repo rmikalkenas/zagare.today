@@ -3,7 +3,7 @@
 Static frontend-only guide/tourism site for **Žagarė**, a small town in northern
 Lithuania (Joniškis district, near the Latvian border). Interactive map of
 points of interest with category filtering. Content is in **Lithuanian**
-(`lang="lt"`). No backend — ever.
+(`lang="lt"`). No backend - ever.
 
 Domain: `zagare.today`. Hosting: **Cloudflare Pages** (the domain is already in
 Cloudflare).
@@ -13,7 +13,7 @@ Cloudflare).
 - **Astro 6** (static output) with file-based routing in `src/pages/`.
 - **React 19** as an Astro island, only for the interactive map (`client:only="react"`).
 - **Tailwind CSS v4** via `@tailwindcss/vite`. Theme tokens live in
-  `src/styles/global.css` under `@theme { … }` — there is **no** `tailwind.config.js`.
+  `src/styles/global.css` under `@theme { … }` - there is **no** `tailwind.config.js`.
 - **Leaflet + react-leaflet** with **CartoDB Positron** tiles (free, no API
   key). OSM + CARTO attribution is required and is rendered by Leaflet.
 - **TypeScript** strict (`astro/tsconfigs/strict`).
@@ -44,7 +44,7 @@ astro.config.mjs    React integration, Tailwind Vite plugin, build.assets="_asse
 
 ## Design system
 
-Aesthetic direction is **editorial / magazine / museum wayfinding** — not
+Aesthetic direction is **editorial / magazine / museum wayfinding** - not
 SaaS. Asymmetric layouts, generous negative space, mixed type sizes, mono
 metadata as decoration, refined minimalism. Avoid generic "dashboard" or
 "startup" styling.
@@ -55,7 +55,7 @@ Brand colors (defined as Tailwind theme tokens in `global.css`):
 - `--color-paper-dim` `#dccdb3`
 - `--color-ink` `#141210` (near-black warm, text)
 - `--color-ink-soft` `#776a55` (metadata / soft text)
-- `--color-brand-600` `#960000` (brand red — matches `ZFT_logo-02.svg`)
+- `--color-brand-600` `#960000` (brand red - matches `ZFT_logo-02.svg`)
   plus a full 50→900 scale.
 
 Typography tokens:
@@ -68,7 +68,7 @@ Typography tokens:
 Coordinates are displayed in **DDM format** (degrees + decimal minutes), e.g.
 `56°21.55958′N / 23°15.30359′E`.
 
-## Data model — `src/data/points.ts`
+## Data model - `src/data/points.ts`
 
 ```ts
 type Category =
@@ -95,8 +95,8 @@ Adding a point: add a new entry to `POINTS`. If it has photos, `curl` them
 into `src/assets/points/`, resize to ≤700px max dimension and convert to
 **WebP** at quality 80 with `cwebp -q 80 -resize 700 0 in.jpg -o out.webp`
 (Homebrew: `brew install webp`; the `-resize 700 0` form caps width at
-700 — flip to `-resize 0 700` for portrait-oriented sources). Reference the
-file by name via `img("name.webp")` — `points.ts` auto-discovers anything
+700 - flip to `-resize 0 700` for portrait-oriented sources). Reference the
+file by name via `img("name.webp")` - `points.ts` auto-discovers anything
 under `src/assets/points/` matching `*.{jpg,jpeg,png,webp}`, so no import
 boilerplate.
 
@@ -129,19 +129,23 @@ rendering are fully data-driven from these.
 
 ## Conventions / gotchas
 
-- The package.json name is still `tidal-telescope` — Astro's random scaffold
+- The package.json name is still `tidal-telescope` - Astro's random scaffold
   default. Rename before shipping; it doesn't affect builds.
 - Build output directory is renamed to `_assets/` (not the Astro-default
   `_astro/`) via `astro.config.mjs` → `build.assets`. This is intentional to
   reduce obvious framework fingerprinting in served URLs.
-- There is **no `<meta name="generator">`** in the HTML head — deliberately
+- There is **no `<meta name="generator">`** in the HTML head - deliberately
   removed. Some Astro runtime markers remain in the hydration script
   (`<astro-island>`, etc.); they can't be cleanly hidden without ejecting
   islands.
 - The site is Lithuanian. Keep UI copy, popup labels, footer, and
   descriptions in Lithuanian. Typographic quotes: `„…"`.
+- **Always use the plain hyphen-minus `-` (U+002D).** Never use em-dash
+  (`—`, U+2014) or en-dash (`–`, U+2013) - not in body copy, page
+  titles, meta descriptions, aria-labels, `points.ts` descriptions, or
+  numeric ranges (`II-V`, `09:00-18:00`). Enforce on every edit.
 - The hero title is a three-line staggered composition
-  ("Žagarė / for / today") with fluid `clamp()` sizing — do not reduce it
+  ("Žagarė / for / today") with fluid `clamp()` sizing - do not reduce it
   to a single line without checking the user's intent.
 - Images in the React island are imported statically in `points.ts` and
   rendered via `<img src={image.src} …>` inside the popup. They're bundled

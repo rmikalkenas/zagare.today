@@ -1,0 +1,219 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const email = "labas@zagare.today";
+const facebookUrl = "https://www.facebook.com/zagareslaisvamaniai";
+---
+
+<Layout
+  title="Kontaktai - Žagarė for today"
+  description="Susisiekite su „Žagarė for today“ komanda - el. paštas, socialiniai tinklai, turizmo informacijos centras."
+>
+  <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
+    <h1
+      class="font-display not-italic tracking-tight leading-[0.86] text-ink"
+    >
+      <span class="block text-[clamp(3rem,12vw,9rem)]">Kontaktai</span>
+      <span
+        class="block italic text-[clamp(1.4rem,3vw,2.2rem)] pl-[0.5em] text-ink-soft mt-2"
+        >parašykite, užsukite</span
+      >
+    </h1>
+
+    <div
+      class="mt-14 md:mt-24 grid md:grid-cols-2 gap-x-10 lg:gap-x-20 gap-y-16 md:gap-y-0"
+    >
+      <article class="md:pr-6 lg:pr-10 flex flex-col">
+        <header>
+          <p class="meta mb-5">I. Parašykite</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-ink"
+          >
+            Asociacija
+            <span class="italic text-brand-600">„Žagarės laisvamaniai“</span>
+          </h2>
+          <p
+            class="mt-3 font-sans text-[14px] md:text-[15px] leading-[1.55] text-ink-soft max-w-[40ch]"
+          >
+            Bendruomenė, kurianti šį leidinį.
+          </p>
+          <p
+            class="mt-5 font-display italic text-[clamp(1rem,1.6vw,1.2rem)] leading-[1.45] text-ink max-w-[42ch]"
+          >
+            Pastebėjote klaidą žemėlapyje, turite pasiūlymą ar norite
+            prisijungti prie veiklos? Rašykite!
+          </p>
+        </header>
+
+        <dl
+          class="mt-8 md:mt-10 font-sans text-[15px] md:text-[16px] leading-[1.55] divide-y divide-ink/10 border-t border-ink/15"
+        >
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">įmonės&nbsp;k.</dt>
+            <dd class="tabular-nums">307234973</dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">adresas</dt>
+            <dd>
+              <a
+                href="https://maps.app.goo.gl/pQ2J5XFyBjNN8zgm8"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-brand-600 transition-colors"
+                >Raktuvės g. 11-1, Žagarė&nbsp;<span
+                  aria-hidden="true"
+                  class="text-ink-soft">↗</span
+                ></a
+              >
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">el. paštas</dt>
+            <dd>
+              <a
+                href={`mailto:${email}`}
+                class="text-brand-600 hover:text-ink transition-colors break-all"
+                >{email}</a
+              >
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">facebook</dt>
+            <dd>
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-brand-600 transition-colors"
+                >/zagareslaisvamaniai&nbsp;<span
+                  aria-hidden="true"
+                  class="text-ink-soft">↗</span
+                ></a
+              >
+            </dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="md:border-l border-ink/15 md:pl-10 lg:pl-16 flex flex-col">
+        <header>
+          <p class="meta mb-5">II. Užsukite</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-ink"
+          >
+            Žagarės regioninio parko
+            <span class="italic text-brand-600">lankytojų centras</span>
+          </h2>
+          <p
+            class="mt-3 font-sans text-[14px] md:text-[15px] leading-[1.55] text-ink-soft max-w-[40ch]"
+          >
+            Turizmo informacija mieste.
+          </p>
+        </header>
+
+        <dl
+          class="mt-8 md:mt-10 font-sans text-[15px] md:text-[16px] leading-[1.55] divide-y divide-ink/10 border-t border-ink/15"
+        >
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">adresas</dt>
+            <dd>
+              <a
+                href="https://maps.app.goo.gl/nhBHe3pWp2RsRErW8"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-brand-600 transition-colors"
+                >Malūno g. 1, Žagarė&nbsp;<span
+                  aria-hidden="true"
+                  class="text-ink-soft">↗</span
+                ></a
+              >
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">telefonai</dt>
+            <dd class="leading-[1.7]">
+              <a
+                href="tel:+37067115033"
+                class="hover:text-brand-600 transition-colors"
+                >+370 671 15033</a
+              ><br />
+              <a
+                href="tel:+37064511716"
+                class="hover:text-brand-600 transition-colors"
+                >+370 645 11716</a
+              >
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">el. paštas</dt>
+            <dd>
+              <a
+                href="mailto:zagares.rp.lc@saugoma.lt"
+                class="hover:text-brand-600 transition-colors break-all"
+                >zagares.rp.lc@saugoma.lt</a
+              >
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">darbo&nbsp;l.</dt>
+            <dd class="font-mono text-[13px] md:text-[14px] leading-[1.7] tabular-nums">
+              <span class="inline-block w-9 text-ink-soft">II-V</span> 09:00&nbsp;-&nbsp;18:00<br />
+              <span class="inline-block w-9 text-ink-soft">VI</span> 10:00&nbsp;-&nbsp;15:00
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">internetas</dt>
+            <dd>
+              <a
+                href="https://zemaitijosstd.lrv.lt/lt/veiklos-sritys/lankytoju-centrai"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-brand-600 transition-colors"
+                >zemaitijosstd.lrv.lt&nbsp;<span
+                  aria-hidden="true"
+                  class="text-ink-soft">↗</span
+                ></a
+              >
+            </dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+
+  </section>
+
+  <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
+
+  <footer
+    class="mx-5 md:mx-8 py-6 meta flex flex-col md:flex-row justify-between gap-2"
+  >
+    <span>Žagarė, Joniškio r., Lietuva</span>
+    <span>Asociacija „Žagarės laisvamaniai“</span>
+    <span>© {new Date().getFullYear()} Žagarė for today</span>
+  </footer>
+</Layout>
