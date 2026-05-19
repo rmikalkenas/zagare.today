@@ -129,8 +129,6 @@ rendering are fully data-driven from these.
 
 ## Conventions / gotchas
 
-- The package.json name is still `tidal-telescope` - Astro's random scaffold
-  default. Rename before shipping; it doesn't affect builds.
 - Build output directory is renamed to `_assets/` (not the Astro-default
   `_astro/`) via `astro.config.mjs` → `build.assets`. This is intentional to
   reduce obvious framework fingerprinting in served URLs.
