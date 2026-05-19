@@ -3,12 +3,82 @@ import Layout from "../layouts/Layout.astro";
 
 const email = "labas@zagare.today";
 const facebookUrl = "https://www.facebook.com/zagareslaisvamaniai";
+
+const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+const contactPageUrl = `${siteOrigin}/kontaktai`;
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": `${contactPageUrl}#contactpage`,
+      url: contactPageUrl,
+      name: "Kontaktai - Žagarė for today",
+      inLanguage: "lt-LT",
+      isPartOf: { "@id": `${siteOrigin}/#website` },
+      about: { "@id": `${siteOrigin}/#organization` },
+    },
+    {
+      "@type": "TouristInformationCenter",
+      "@id": `${contactPageUrl}#tic`,
+      name: "Žagarės regioninio parko lankytojų centras",
+      url: "https://zemaitijosstd.lrv.lt/lt/veiklos-sritys/lankytoju-centrai",
+      email: "zagares.rp.lc@saugoma.lt",
+      telephone: ["+37067115033", "+37064511716"],
+      hasMap: "https://maps.app.goo.gl/nhBHe3pWp2RsRErW8",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Malūno g. 1",
+        addressLocality: "Žagarė",
+        addressRegion: "Joniškio r.",
+        addressCountry: "LT",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: "Saturday",
+          opens: "10:00",
+          closes: "15:00",
+        },
+      ],
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Pradžia",
+          item: `${siteOrigin}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Kontaktai",
+          item: contactPageUrl,
+        },
+      ],
+    },
+  ],
+};
 ---
 
 <Layout
-  title="Kontaktai - Žagarė for today"
-  description="Susisiekite su „Žagarė for today“ komanda - el. paštas, socialiniai tinklai, turizmo informacijos centras."
+  title='Kontaktai - Asociacija "Žagarės laisvamaniai" | Žagarė for today'
+  description="Susisiekite su asociacija „Žagarės laisvamaniai“ - el. paštas, Facebook. Žagarės regioninio parko lankytojų centras: adresas, telefonai, darbo laikas."
 >
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(contactSchema).replace(/</g, "\\u003c")}
+    is:inline
+  />
   <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
     <h1
       class="font-display not-italic tracking-tight leading-[0.86] text-ink"

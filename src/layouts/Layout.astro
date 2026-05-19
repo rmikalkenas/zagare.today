@@ -16,11 +16,68 @@ interface Props {
 
 const {
   title = "Žagarė for today",
-  description = "Žagarės miestelio gidas - žymios vietos, kavinės, parduotuvės ir poilsio zonos.",
+  description = "Interaktyvus Žagarės žemėlapis: lankytinos vietos, kavinės, parduotuvės, istorija ir gamta. Miestelio gidas, kurį leidžia vietos bendruomenė.",
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const ogImage = new URL("/og.png", Astro.site).toString();
+const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteOrigin}/#website`,
+      url: `${siteOrigin}/`,
+      name: "Žagarė for today",
+      description:
+        "Žagarės miestelio gidas - lankytinos vietos, istorija, bendruomenė.",
+      inLanguage: "lt-LT",
+      publisher: { "@id": `${siteOrigin}/#organization` },
+    },
+    {
+      "@type": "NGO",
+      "@id": `${siteOrigin}/#organization`,
+      name: 'Asociacija "Žagarės laisvamaniai"',
+      legalName: 'Asociacija "Žagarės laisvamaniai"',
+      taxID: "307234973",
+      url: `${siteOrigin}/`,
+      email: "labas@zagare.today",
+      sameAs: ["https://www.facebook.com/zagareslaisvamaniai"],
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Raktuvės g. 11-1",
+        addressLocality: "Žagarė",
+        addressRegion: "Joniškio r.",
+        postalCode: "LT-84316",
+        addressCountry: "LT",
+      },
+      areaServed: { "@id": `${siteOrigin}/#place` },
+    },
+    {
+      "@type": "Place",
+      "@id": `${siteOrigin}/#place`,
+      name: "Žagarė",
+      description:
+        "Miestelis Lietuvos šiaurėje, Joniškio rajone, prie Latvijos sienos. Žagarės regioninis parkas.",
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 56.359326,
+        longitude: 23.255060,
+      },
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: "Joniškio rajono savivaldybė",
+        containedInPlace: {
+          "@type": "Country",
+          name: "Lietuva",
+          identifier: "LT",
+        },
+      },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -51,6 +108,11 @@ const ogImage = new URL("/og.png", Astro.site).toString();
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={title} />
     <title>{title}</title>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(siteSchema).replace(/</g, "\\u003c")}
+      is:inline
+    />
   </head>
   <body class="min-h-dvh bg-paper text-ink antialiased font-sans">
     <header class="border-b border-ink/15">
