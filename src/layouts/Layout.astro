@@ -115,6 +115,12 @@ const siteSchema = {
       set:html={JSON.stringify(siteSchema).replace(/</g, "\\u003c")}
       is:inline
     />
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "0dea41e9583745bb85bd37c2275c6141"}'
+    ></script>
   </head>
   <body class="min-h-dvh bg-paper text-ink antialiased font-sans">
     <header class="border-b border-ink/15">
