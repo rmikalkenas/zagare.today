@@ -17,8 +17,9 @@ Cloudflare).
 - **Leaflet + react-leaflet** with **CartoDB Positron** tiles (free, no API
   key). OSM + CARTO attribution is required and is rendered by Leaflet.
 - **TypeScript** strict (`astro/tsconfigs/strict`).
-- **Fonts** loaded from Google Fonts: **Instrument Serif** (display, italic
-  capable), **IBM Plex Sans** (UI/body), **IBM Plex Mono** (metadata).
+- **Fonts** self-hosted via `@fontsource/*` (bundled, no external requests):
+  **Instrument Serif** (display, italic capable), **IBM Plex Sans** (UI/body),
+  **IBM Plex Mono** (metadata).
 
 ## Structure
 
@@ -34,7 +35,8 @@ src/
   layouts/
     Layout.astro    Shared shell: <head>, header, <slot />
   pages/
-    index.astro     Hero + map (the only page for now)
+    index.astro     Hero + map
+    kontaktai.astro Contacts page (email + Facebook)
   styles/
     global.css      Tailwind + @theme tokens + Leaflet popup overrides
 public/
@@ -103,6 +105,31 @@ boilerplate.
 Adding a category: extend the `Category` union **and** add an entry to
 `CATEGORIES` with `label` (Lithuanian) + `color`. The filter list and marker
 rendering are fully data-driven from these.
+
+## Tracks - `src/data/tracks/`
+
+Some points (hiking trails) have an associated polyline drawn on the map plus a
+length shown in the popup. Tracks live **separately** from `POINTS`, keyed by
+point id:
+
+- One file per trail at `src/data/tracks/data/<point-id>.ts`, where
+  `<point-id>` **must exactly match** a `Point.id`. The file `export default`s
+  a `LatLng[]` (`type LatLng = [number, number]`, i.e. `[lat, lng]` pairs).
+- `tracks/index.ts` auto-discovers `./data/*.ts` via `import.meta.glob`
+  (eager, `import: "default"`), strips the filename to the id, and builds
+  `TRACKS: Record<id, { points, lengthKm }>`. No import boilerplate - drop the
+  file and it's wired up.
+- `lengthKm` is computed at module load by `trackKm()` in
+  `src/data/track-length.ts` (haversine sum over the path). Unit-tested in
+  `track-length.test.ts` (`npm test`).
+- `getTrack(id)` is the only export consumers use: `Map.tsx` draws the
+  `<Polyline>` and fits bounds to track+marker when that point is selected;
+  `PointPopup.tsx` renders `track.lengthKm` (formatted `lt-LT`, " km").
+
+Adding a track: from a GPX, simplify with Ramer-Douglas-Peucker (~5m / 0.00005°
+tolerance) down to a few dozen points, then save as
+`src/data/tracks/data/<point-id>.ts` with `export default` of the
+`[lat, lng]` array. See `ozo-takas.ts` for the reference format.
 
 ## Map behavior (`src/components/Map.tsx`)
 

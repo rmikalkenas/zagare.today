@@ -2,8 +2,8 @@
 
 Interactive guide to **Žagarė** - a small town in northern Lithuania
 (Joniškis district, near the Latvian border). Points of interest, category
-filtering, photos, and links to further reading, laid out as an editorial
-magazine spread rather than a dashboard.
+filtering, photos, marked trails, and links to further reading, laid out as an
+editorial magazine spread rather than a dashboard.
 
 Live at **[zagare.today](https://zagare.today)**. Static frontend only - no
 backend, no database, no login. Content is in Lithuanian.
@@ -24,9 +24,11 @@ npm install
 npm run dev          # dev server at http://localhost:4321
 npm run build        # static build → ./dist
 npm run preview      # preview the production build locally
+npm run check        # astro check (TypeScript)
+npm test             # vitest unit tests (e.g. track-length math)
 ```
 
-Requires Node **24+**.
+Requires Node **26+**.
 
 ## Adding or editing points
 
@@ -68,6 +70,25 @@ pair at the top of the menu to copy it.
 add a matching entry to `CATEGORIES` with a Lithuanian `label` and a hex
 `color`. The filter list and marker rendering are entirely data-driven.
 
+**Adding a track** - some points (hiking trails) draw a polyline on the map and
+show their length in the popup. Create `src/data/tracks/data/<point-id>.ts`
+where `<point-id>` exactly matches the `Point.id`, and `export default` a
+`LatLng[]` (`[lat, lng]` pairs):
+
+```ts
+const TRACK: [number, number][] = [
+  [56.353458, 23.223802],
+  [56.351623, 23.225458],
+  // …
+];
+export default TRACK;
+```
+
+Tracks are auto-discovered (no imports to wire up), their length is computed
+with `trackKm()` (haversine), and they render whenever that point is selected.
+For real GPX data, simplify first (Ramer-Douglas-Peucker, ~5m tolerance) down to
+a few dozen points to keep the bundle small.
+
 ## Structure
 
 ```
@@ -76,22 +97,29 @@ src/
     logos/                   Brand mark in three variants (dark / red / white)
     points/                  Photos for map points (WebP, ≤700px)
   components/
-    Map.tsx                  MapExperience - state + map container + auto-fit
+    Map.tsx                  MapExperience - state + map container + auto-fit + track polyline
     CategoryFilter.tsx       Desktop filter sidebar
     CategoryList.tsx         Shared category list (used by sidebar + sheet)
     CategoryGlyph.tsx        Lucide-derived category icons (React + raw SVG)
     MobileFilterSheet.tsx    Bottom-sheet filter on mobile
-    PointPopup.tsx           Popup body, image carousel, external links
+    PointPopup.tsx           Popup body, image carousel, track length, external links
+    VisibleCount.tsx         "Rodoma NN / NN" visible-vs-total counter
   data/
-    points.ts                POINTS, CATEGORIES, CATEGORY_COUNTS, img() helper
+    points.ts                POINTS, CATEGORIES, CATEGORY_KEYS, CATEGORY_COUNTS, img() helper
+    track-length.ts          trackKm() - haversine length of a LatLng[] path
+    track-length.test.ts     Unit test for trackKm()
+    tracks/
+      index.ts               Auto-discovers track files, exposes getTrack(id)
+      data/<point-id>.ts     One file per trail, default-exports LatLng[]
   layouts/
-    Layout.astro             <head>, header (logo + coords), <slot />
+    Layout.astro             <head> (+ Cloudflare Web Analytics beacon), header (logo + coords), <slot />
   pages/
-    index.astro              Hero + map + JSON-LD (the only page, for now)
+    index.astro              Hero + map + JSON-LD
+    kontaktai.astro          Contacts page (email + Facebook) + ContactPage JSON-LD
   styles/
     global.css               Tailwind v4, @theme tokens, @utility classes, Leaflet overrides
 public/
-  _headers                   Cloudflare cache + security headers
+  _headers                   Cloudflare cache + security headers (incl. CSP)
   robots.txt                 Allow all + sitemap pointer
   favicon.svg, og.png        Site assets served as-is
 astro.config.mjs             React + sitemap integrations, Tailwind Vite plugin
