@@ -25,7 +25,7 @@ interface KVNamespace {
 interface Env {
   ZYGIS_SVETE: KVNamespace;
   MAX_REGISTRATIONS?: string;
-  // TURNSTILE_SECRET?: string;  // wire when Turnstile is added
+  TURNSTILE_SECRET?: string;
 }
 
 type Ctx = { request: Request; env: Env };
@@ -36,6 +36,33 @@ const MAX_NAME = 80;
 const MAX_EMAIL = 120;
 // Pragmatic email shape check - server side is authoritative but not strict RFC.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Cloudflare Turnstile. When TURNSTILE_SECRET is unset (local dev / preview) we
+// fall back to the official "always passes" TEST secret so the flow still works.
+// PRODUCTION MUST set the real secret in Pages -> Variables and secrets, else
+// there is effectively no bot protection.
+const TURNSTILE_TEST_SECRET = "1x0000000000000000000000000000000AA";
+const TURNSTILE_VERIFY_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+async function verifyTurnstile(
+  token: string,
+  secret: string,
+  ip: string | null,
+): Promise<boolean> {
+  if (!token) return false;
+  const form = new URLSearchParams();
+  form.set("secret", secret);
+  form.set("response", token);
+  if (ip) form.set("remoteip", ip);
+  try {
+    const res = await fetch(TURNSTILE_VERIFY_URL, { method: "POST", body: form });
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
+}
 
 function maxFrom(env: Env): number {
   const n = parseInt(env.MAX_REGISTRATIONS ?? "", 10);
@@ -67,7 +94,12 @@ export const onRequestGet = async ({ env }: Ctx): Promise<Response> => {
 export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> => {
   const max = maxFrom(env);
 
-  let body: { name?: unknown; email?: unknown; website?: unknown };
+  let body: {
+    name?: unknown;
+    email?: unknown;
+    website?: unknown;
+    token?: unknown;
+  };
   try {
     body = await request.json();
   } catch {
@@ -77,6 +109,17 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
   // Honeypot: bots fill hidden "website". Pretend success, store nothing.
   if (typeof body.website === "string" && body.website.trim() !== "") {
     return json({ ok: true, status: "ok" });
+  }
+
+  // Turnstile: verify the human-challenge token before doing anything else.
+  const token = typeof body.token === "string" ? body.token : "";
+  const passed = await verifyTurnstile(
+    token,
+    env.TURNSTILE_SECRET ?? TURNSTILE_TEST_SECRET,
+    request.headers.get("CF-Connecting-IP"),
+  );
+  if (!passed) {
+    return json({ ok: false, status: "captcha" }, 403);
   }
 
   const name = typeof body.name === "string" ? body.name.trim() : "";
