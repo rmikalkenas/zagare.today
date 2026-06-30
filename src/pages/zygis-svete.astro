@@ -149,11 +149,13 @@ const eventSchema = {
             />
           </div>
 
-          <!-- Turnstile widget; injects hidden "cf-turnstile-response" token. -->
+          <!-- Turnstile widget; injects hidden "cf-turnstile-response" token.
+               interaction-only: stays invisible unless a challenge is needed. -->
           <div
             class="cf-turnstile"
             data-sitekey={TURNSTILE_SITEKEY}
             data-theme="light"
+            data-appearance="interaction-only"
           >
           </div>
 
