@@ -3,7 +3,9 @@
 Static frontend-only guide/tourism site for **Žagarė**, a small town in northern
 Lithuania (Joniškis district, near the Latvian border). Interactive map of
 points of interest with category filtering. Content is in **Lithuanian**
-(`lang="lt"`). No backend - ever.
+(`lang="lt"`). Frontend-only, with **one deliberate exception**: a single
+Cloudflare Pages Function + Workers KV powers the event registration form (see
+"Event registration" below). No traditional server/database beyond that.
 
 Domain: `zagare.today`. Hosting: **Cloudflare Pages** (the domain is already in
 Cloudflare).
@@ -178,6 +180,37 @@ tolerance) down to a few dozen points, then save as
   client-only React tree.
 - Leaflet touches `window`, so the map island uses `client:only="react"`
   (no SSR for that component).
+
+## Event registration - `/zygis-svete`
+
+The only server-side piece in the project. Registration form for the "Žygis
+Švėtės upe" event (during the Vyšnių festivalis), capped at a configurable
+number of seats.
+
+- **Page**: `src/pages/zygis-svete.astro` - editorial form (Vardas + El. paštas),
+  posts JSON via `fetch` to the Function (native submit is blocked by the
+  `form-action 'none'` CSP, which is intentional). Shows live "liko vietų" and
+  Lithuanian status messages.
+- **Function**: `functions/api/zygis-svete.ts` (a Cloudflare Pages Function at
+  `/api/zygis-svete`). `GET` returns availability; `POST` registers one person.
+  Validation, dedup, cap, honeypot, and Turnstile verification all server-side.
+- **Storage**: Workers **KV**, bound as **`ZYGIS_SVETE`** (Pages -> Settings ->
+  Bindings). One `reg:<email>` key per registrant (lowercased email = dedup
+  key); count is derived by listing the `reg:` prefix. KV is eventually
+  consistent and the cap check is not atomic, so the cap can overshoot under a
+  burst - accepted for a small event. Read registrations in the dashboard: KV ->
+  `zagare-today` -> KV Pairs -> prefix `reg:`.
+- **Spam**: hidden honeypot field `website` + Cloudflare **Turnstile** (Managed,
+  `interaction-only`). The Function verifies the token via siteverify and
+  **fails closed (503)** if `TURNSTILE_SECRET` is unset.
+- **Config (Pages -> Variables and secrets)**:
+  - `PUBLIC_TURNSTILE_SITEKEY` - plaintext **build** var (inlined into client
+    JS); falls back to Cloudflare's test sitekey if unset.
+  - `TURNSTILE_SECRET` - encrypted **runtime** secret; **required** in prod.
+  - `MAX_REGISTRATIONS` - optional cap (default 30; `"0"` closes registration).
+- **Local dev**: `astro dev` does NOT run Functions. Use
+  `npm run build && npx wrangler pages dev dist --kv ZYGIS_SVETE
+  --binding TURNSTILE_SECRET=1x0000000000000000000000000000000AA` (test secret).
 
 ## Commands
 

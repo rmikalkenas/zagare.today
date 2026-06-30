@@ -1,21 +1,3 @@
-/**
- * Cloudflare Pages Function: event registration for "Žygis Švėtės upe".
- *
- * Routes (this file = /api/zygis-svete):
- *   GET  -> { count, max, slotsLeft, full }       current availability
- *   POST -> { ok, status, slotsLeft }             register one person
- *
- * Storage: Workers KV, bound as ZYGIS_SVETE (see Pages -> Settings -> Bindings).
- *   reg:<email>  -> JSON { name, email, ts }   one key per registrant (dedup)
- * Count is derived by listing the "reg:" prefix, so there is no separate
- * counter key to drift. KV is eventually consistent, so two simultaneous
- * submits could overshoot the cap by one - acceptable for a small event.
- *
- * Cap is configurable via the MAX_REGISTRATIONS text variable
- * (Pages -> Settings -> Variables and secrets); falls back to 30.
- */
-
-// Minimal KV surface we use - avoids depending on @cloudflare/workers-types.
 interface KVNamespace {
   get(key: string): Promise<string | null>;
   put(key: string, value: string): Promise<void>;
@@ -34,14 +16,8 @@ const DEFAULT_MAX = 30;
 const KEY_PREFIX = "reg:";
 const MAX_NAME = 80;
 const MAX_EMAIL = 120;
-// Pragmatic email shape check - server side is authoritative but not strict RFC.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Cloudflare Turnstile. When TURNSTILE_SECRET is unset (local dev / preview) we
-// fall back to the official "always passes" TEST secret so the flow still works.
-// PRODUCTION MUST set the real secret in Pages -> Variables and secrets, else
-// there is effectively no bot protection.
-const TURNSTILE_TEST_SECRET = "1x0000000000000000000000000000000AA";
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
@@ -66,7 +42,7 @@ async function verifyTurnstile(
 
 function maxFrom(env: Env): number {
   const n = parseInt(env.MAX_REGISTRATIONS ?? "", 10);
-  return Number.isFinite(n) && n > 0 ? n : DEFAULT_MAX;
+  return Number.isFinite(n) && n >= 0 ? n : DEFAULT_MAX;
 }
 
 function json(body: unknown, status = 200): Response {
@@ -106,16 +82,18 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     return json({ ok: false, status: "invalid" }, 400);
   }
 
-  // Honeypot: bots fill hidden "website". Pretend success, store nothing.
   if (typeof body.website === "string" && body.website.trim() !== "") {
     return json({ ok: true, status: "ok" });
   }
 
-  // Turnstile: verify the human-challenge token before doing anything else.
+  const secret = env.TURNSTILE_SECRET;
+  if (!secret) {
+    return json({ ok: false, status: "error" }, 503);
+  }
   const token = typeof body.token === "string" ? body.token : "";
   const passed = await verifyTurnstile(
     token,
-    env.TURNSTILE_SECRET ?? TURNSTILE_TEST_SECRET,
+    secret,
     request.headers.get("CF-Connecting-IP"),
   );
   if (!passed) {
@@ -135,13 +113,14 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     return json({ ok: false, status: "invalid" }, 400);
   }
 
-  if ((await count(env)) >= max) {
-    return json({ ok: false, status: "full" }, 409);
-  }
-
   const key = KEY_PREFIX + email;
   if ((await env.ZYGIS_SVETE.get(key)) !== null) {
     return json({ ok: false, status: "duplicate" }, 409);
+  }
+
+  const used = await count(env);
+  if (used >= max) {
+    return json({ ok: false, status: "full" }, 409);
   }
 
   await env.ZYGIS_SVETE.put(
@@ -149,6 +128,6 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     JSON.stringify({ name, email, ts: new Date().toISOString() }),
   );
 
-  const slotsLeft = Math.max(0, max - (await count(env)));
+  const slotsLeft = Math.max(0, max - (used + 1));
   return json({ ok: true, status: "ok", slotsLeft });
 };
