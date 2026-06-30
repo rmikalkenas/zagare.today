@@ -4,8 +4,6 @@ import Layout from "../layouts/Layout.astro";
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const pageUrl = `${siteOrigin}/zygis-svete`;
 
-// Public Turnstile site key. Set PUBLIC_TURNSTILE_SITEKEY as a build variable in
-// Pages for production; falls back to Cloudflare's "always passes" TEST key.
 const TURNSTILE_SITEKEY =
   import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? "1x00000000000000000000AA";
 
@@ -50,7 +48,6 @@ const eventSchema = {
     <div
       class="mt-14 md:mt-24 grid md:grid-cols-2 gap-x-10 lg:gap-x-20 gap-y-16 md:gap-y-0"
     >
-      <!-- Left: event detail. Placeholder values - replace before publishing. -->
       <article class="md:pr-6 lg:pr-10 flex flex-col">
         <header>
           <p class="meta mb-5">I. Žygis</p>
@@ -93,7 +90,6 @@ const eventSchema = {
         </dl>
       </article>
 
-      <!-- Right: registration form -->
       <article class="md:border-l border-ink/15 md:pl-10 lg:pl-16 flex flex-col">
         <header>
           <p class="meta mb-5">II. Registracija</p>
@@ -137,7 +133,6 @@ const eventSchema = {
             />
           </div>
 
-          <!-- Honeypot: hidden from humans, bots fill it. Do not remove. -->
           <div class="hidden" aria-hidden="true">
             <label for="website">Svetainė</label>
             <input
@@ -149,11 +144,11 @@ const eventSchema = {
             />
           </div>
 
-          <!-- Turnstile widget; injects hidden "cf-turnstile-response" token. -->
           <div
             class="cf-turnstile"
             data-sitekey={TURNSTILE_SITEKEY}
             data-theme="light"
+            data-appearance="interaction-only"
           >
           </div>
 
