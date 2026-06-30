@@ -4,6 +4,11 @@ import Layout from "../layouts/Layout.astro";
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const pageUrl = `${siteOrigin}/zygis-svete`;
 
+// Public Turnstile site key. Set PUBLIC_TURNSTILE_SITEKEY as a build variable in
+// Pages for production; falls back to Cloudflare's "always passes" TEST key.
+const TURNSTILE_SITEKEY =
+  import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? "1x00000000000000000000AA";
+
 const eventSchema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -27,6 +32,11 @@ const eventSchema = {
     set:html={JSON.stringify(eventSchema).replace(/</g, "\\u003c")}
     is:inline
   />
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+    is:inline></script>
 
   <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
     <h1 class="font-display not-italic tracking-tight leading-[0.86] text-ink">
@@ -139,6 +149,14 @@ const eventSchema = {
             />
           </div>
 
+          <!-- Turnstile widget; injects hidden "cf-turnstile-response" token. -->
+          <div
+            class="cf-turnstile"
+            data-sitekey={TURNSTILE_SITEKEY}
+            data-theme="light"
+          >
+          </div>
+
           <button
             data-submit
             type="submit"
@@ -172,8 +190,14 @@ const eventSchema = {
       full: "Vietų nebeliko - registracija baigta.",
       duplicate: "Šis el. paštas jau užregistruotas.",
       invalid: "Patikrinkite vardą ir el. paštą.",
+      captcha: "Patvirtinkite, kad nesate robotas, ir bandykite dar kartą.",
       error: "Įvyko klaida. Bandykite vėliau.",
     };
+
+    // Turnstile tokens are single-use; reset the widget so a retry gets a fresh one.
+    function resetTurnstile() {
+      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+    }
 
     function setStatus(text: string, kind: "ok" | "error" | "") {
       if (!statusEl) return;
@@ -212,9 +236,16 @@ const eventSchema = {
       const name = String(fd.get("name") ?? "").trim();
       const email = String(fd.get("email") ?? "").trim();
       const website = String(fd.get("website") ?? "");
+      const token = String(fd.get("cf-turnstile-response") ?? "");
 
       if (!name || !email) {
         setStatus(MESSAGES.invalid, "error");
+        return;
+      }
+
+      if (!token) {
+        setStatus(MESSAGES.captcha, "error");
+        resetTurnstile();
         return;
       }
 
@@ -227,7 +258,7 @@ const eventSchema = {
         const res = await fetch(ENDPOINT, {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ name, email, website }),
+          body: JSON.stringify({ name, email, website, token }),
         });
         const data = await res.json().catch(() => ({ status: "error" }));
         const msg = MESSAGES[data.status] ?? MESSAGES.error;
@@ -244,12 +275,14 @@ const eventSchema = {
           setStatus(msg, "error");
           submitBtn.disabled = false;
           submitBtn.textContent = original;
+          resetTurnstile();
           if (data.status === "full") renderSlots(0, true);
         }
       } catch {
         setStatus(MESSAGES.error, "error");
         submitBtn.disabled = false;
         submitBtn.textContent = original;
+        resetTurnstile();
       }
     });
 
