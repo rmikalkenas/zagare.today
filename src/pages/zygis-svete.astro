@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import RouteMap from "../components/RouteMap.tsx";
 
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const pageUrl = `${siteOrigin}/zygis-svete`;
@@ -210,6 +211,18 @@ const eventSchema = {
           >
           </p>
         </form>
+
+        <div class="mt-12 md:mt-auto md:pt-12">
+          <p class="meta mb-4">Maršrutas</p>
+          <RouteMap client:only="react">
+            <div
+              slot="fallback"
+              class="h-[280px] md:h-[340px] border border-ink/30 flex items-center justify-center"
+            >
+              <p class="meta">Kraunamas žemėlapis…</p>
+            </div>
+          </RouteMap>
+        </div>
       </article>
     </div>
   </section>
