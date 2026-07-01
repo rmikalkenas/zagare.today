@@ -155,7 +155,7 @@ const eventSchema = {
             role="status"
             aria-live="polite"
             tabindex="-1"
-            class="hidden border-l-2 pl-4 py-2 font-sans text-[15px] leading-[1.55] outline-none"
+            class="hidden whitespace-pre-line border-l-2 pl-4 py-2 font-sans text-[15px] leading-[1.55] outline-none"
           >
           </p>
 
@@ -213,7 +213,7 @@ const eventSchema = {
           </button>
         </form>
 
-        <div class="mt-12 md:mt-auto md:pt-12">
+        <div data-map class="mt-12 md:mt-auto md:pt-12">
           <p class="meta mb-4">Maršrutas</p>
           <RouteMap client:only="react">
             <div
@@ -237,7 +237,7 @@ const eventSchema = {
     const slotsEls = document.querySelectorAll<HTMLElement>("[data-slots]");
 
     const MESSAGES: Record<string, string> = {
-      ok: "Ačiū! Registracija priimta.",
+      ok: "Ačiū! Registracija priimta.\nLauksime Jūsų liepos 18 d. 12.00 val. Uolos g. pabaigoje.",
       full: "Vietų nebeliko - registracija baigta.",
       duplicate: "Šis el. paštas jau užregistruotas.",
       invalid: "Patikrinkite vardą ir el. paštą.",
@@ -256,8 +256,8 @@ const eventSchema = {
       statusEl.classList.remove(
         "text-brand-600",
         "border-brand-600",
-        "text-ink",
-        "border-ink",
+        "text-success",
+        "border-success",
       );
       if (!text) {
         statusEl.classList.add("hidden");
@@ -267,7 +267,7 @@ const eventSchema = {
       if (kind === "error") {
         statusEl.classList.add("text-brand-600", "border-brand-600");
       } else if (kind === "ok") {
-        statusEl.classList.add("text-ink", "border-ink");
+        statusEl.classList.add("text-success", "border-success");
       }
       // Bring feedback into view and announce it - it now sits above the fold
       // of the form, but on mobile the button may be scrolled past it.
@@ -332,13 +332,19 @@ const eventSchema = {
         const msg = MESSAGES[data.status] ?? MESSAGES.error;
 
         if (data.ok) {
-          setStatus(msg, "ok");
-          form.reset();
           if (typeof data.slotsLeft === "number") {
             renderSlots(data.slotsLeft, data.slotsLeft === 0);
           }
-          submitBtn.textContent = "Užsiregistruota";
-          // Leave disabled after a successful submit from this device.
+          // Collapse the form to just the confirmation banner.
+          Array.from(form.children).forEach((el) => {
+            if (el !== statusEl) el.classList.add("hidden");
+          });
+          // Form no longer fills the column, so stop bottom-pinning the map
+          // (md:mt-auto) - let it sit right under the banner instead.
+          document
+            .querySelector("[data-map]")
+            ?.classList.remove("md:mt-auto", "md:pt-12");
+          setStatus(msg, "ok");
         } else {
           setStatus(msg, "error");
           submitBtn.disabled = false;

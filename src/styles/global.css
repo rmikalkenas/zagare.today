@@ -66,6 +66,8 @@
   --color-brand-700: #7a0000;
   --color-brand-800: #5c0000;
   --color-brand-900: #3f0000;
+
+  --color-success: #3f6236;
 }
 
 /* Reusable editorial metadata styling (mono, uppercase, tracked). */
