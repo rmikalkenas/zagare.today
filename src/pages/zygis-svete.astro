@@ -150,6 +150,15 @@ const eventSchema = {
         </header>
 
         <form data-form class="mt-8 md:mt-10 flex flex-col gap-7" novalidate>
+          <p
+            data-status
+            role="status"
+            aria-live="polite"
+            tabindex="-1"
+            class="hidden border-l-2 pl-4 py-2 font-sans text-[15px] leading-[1.55] outline-none"
+          >
+          </p>
+
           <div class="flex flex-col gap-2">
             <label for="name" class="meta">Vardas</label>
             <input
@@ -202,14 +211,6 @@ const eventSchema = {
           >
             Registruotis
           </button>
-
-          <p
-            data-status
-            role="status"
-            aria-live="polite"
-            class="font-sans text-[15px] leading-[1.5] min-h-[1.5em]"
-          >
-          </p>
         </form>
 
         <div class="mt-12 md:mt-auto md:pt-12">
@@ -252,9 +253,26 @@ const eventSchema = {
     function setStatus(text: string, kind: "ok" | "error" | "") {
       if (!statusEl) return;
       statusEl.textContent = text;
-      statusEl.classList.remove("text-brand-600", "text-ink-soft");
-      if (kind === "error") statusEl.classList.add("text-brand-600");
-      else if (kind === "ok") statusEl.classList.add("text-ink-soft");
+      statusEl.classList.remove(
+        "text-brand-600",
+        "border-brand-600",
+        "text-ink",
+        "border-ink",
+      );
+      if (!text) {
+        statusEl.classList.add("hidden");
+        return;
+      }
+      statusEl.classList.remove("hidden");
+      if (kind === "error") {
+        statusEl.classList.add("text-brand-600", "border-brand-600");
+      } else if (kind === "ok") {
+        statusEl.classList.add("text-ink", "border-ink");
+      }
+      // Bring feedback into view and announce it - it now sits above the fold
+      // of the form, but on mobile the button may be scrolled past it.
+      statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      statusEl.focus({ preventScroll: true });
     }
 
     function renderSlots(slotsLeft: number, full: boolean) {
