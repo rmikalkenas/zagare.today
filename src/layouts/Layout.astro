@@ -153,7 +153,9 @@ const siteSchema = {
             <details class="group relative">
               <summary
                 class="meta text-[11px]! hover:text-brand-600 transition-colors cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden aria-[current=page]:text-brand-600"
-                aria-current={Astro.url.pathname === "/zygis-svete"
+                aria-current={["/zygis-svete", "/laisvamaniu-scena"].includes(
+                  Astro.url.pathname,
+                )
                   ? "page"
                   : undefined}
               >
@@ -185,6 +187,15 @@ const siteSchema = {
                     : undefined}
                 >
                   Žygis Švėtės dugnu
+                </a>
+                <a
+                  href="/laisvamaniu-scena"
+                  class="meta text-[11px]! block px-4 py-2.5 whitespace-nowrap hover:text-brand-600 hover:bg-paper-dim transition-colors aria-[current=page]:text-brand-600"
+                  aria-current={Astro.url.pathname === "/laisvamaniu-scena"
+                    ? "page"
+                    : undefined}
+                >
+                  Laisvamanių scena
                 </a>
               </div>
             </details>
@@ -261,6 +272,15 @@ const siteSchema = {
               : undefined}
           >
             Žygis Švėtės dugnu
+          </a>
+          <a
+            href="/laisvamaniu-scena"
+            class="meta text-[11px]! px-5 py-3 text-ink hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+            aria-current={Astro.url.pathname === "/laisvamaniu-scena"
+              ? "page"
+              : undefined}
+          >
+            Laisvamanių scena
           </a>
           <a
             href="/kontaktai"
