@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PointMap from "../components/PointMap.tsx";
+
+const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+const pageUrl = `${siteOrigin}/laisvamaniu-scena`;
+
+const LAT = 56.351005;
+const LNG = 23.223931;
+const TICKETS_URL = "https://vysniufestivalis.lt/bilietai/";
+
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Pradžia", item: `${siteOrigin}/` },
+        { "@type": "ListItem", position: 2, name: "Laisvamanių scena", item: pageUrl },
+      ],
+    },
+    {
+      "@type": "Event",
+      name: "Laisvamanių scena",
+      startDate: "2026-07-18T19:00:00+03:00",
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      url: pageUrl,
+      location: {
+        "@type": "Place",
+        name: "Žagarės rekreacinė zona prie Žvelgaičių ežero",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "S. Daukanto g. 129",
+          addressLocality: "Žagarė",
+          addressRegion: "Joniškio r.",
+          addressCountry: "LT",
+        },
+        geo: { "@type": "GeoCoordinates", latitude: LAT, longitude: LNG },
+      },
+      offers: {
+        "@type": "Offer",
+        url: TICKETS_URL,
+        availability: "https://schema.org/InStock",
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  title="Laisvamanių scena | Žagarė for today"
+  description="Liepos 18 d. 19.00 val. - Laisvamanių scena Žagarės rekreacinėje zonoje prie Žvelgaičių ežero. Patekimas su „Vyšnių festivalio“ bilietu."
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(eventSchema).replace(/</g, "\\u003c")}
+    is:inline
+  />
+
+  <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
+    <h1 class="font-display not-italic tracking-tight leading-[0.86] text-ink">
+      <span class="block text-[clamp(2rem,6vw,4.2rem)]"
+        >Laisvamanių <span class="italic text-brand-600">scena</span></span
+      >
+    </h1>
+    <p
+      class="mt-3 font-display italic text-[clamp(1.1rem,2vw,1.5rem)] text-ink-soft"
+    >
+      Liepos 18 d., 19.00 val.
+    </p>
+
+    <div
+      class="mt-14 md:mt-24 grid md:grid-cols-2 gap-x-10 lg:gap-x-20 gap-y-16 md:gap-y-0"
+    >
+      <article class="md:pr-6 lg:pr-10 flex flex-col">
+        <header>
+          <p class="meta mb-5">I. Informacija</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-ink"
+          >
+            TBA
+          </h2>
+        </header>
+
+        <div
+          class="mt-6 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft flex flex-col gap-4"
+        >
+          <!-- TODO: replace with event description when available -->
+          <p>TBA</p>
+        </div>
+
+        <p
+          class="mt-6 font-sans text-[14px] md:text-[15px] leading-[1.55] text-ink border-l-2 border-brand-600 pl-4"
+        >
+          Patekimas prie Laisvamanių scenos su „Vyšnių festivalio“ <a
+            href={TICKETS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline underline-offset-2 decoration-ink/30 hover:text-brand-600 hover:decoration-brand-600 transition-colors"
+            >bilietu</a
+          >.
+        </p>
+
+        <dl
+          class="mt-8 md:mt-10 font-sans text-[15px] md:text-[16px] leading-[1.55] divide-y divide-ink/10 border-t border-ink/15"
+        >
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">data</dt>
+            <dd>Liepos 18 d., 19.00 val.</dd>
+          </div>
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">vieta</dt>
+            <dd>
+              Žagarės rekreacinėje zonoje prie Žvelgaičių ežero, S. Daukanto g.
+              129
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">kaina</dt>
+            <dd>
+              Galioja tas pats „Vyšnių festivalio“ <a
+                href={TICKETS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="underline underline-offset-2 decoration-ink/30 hover:text-brand-600 hover:decoration-brand-600 transition-colors"
+                >bilietas</a
+              >
+            </dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="md:border-l border-ink/15 md:pl-10 lg:pl-16 flex flex-col">
+        <header>
+          <p class="meta mb-5">II. Vieta</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-brand-600"
+          >
+            Prie <span class="italic text-ink">Žvelgaičių ežero</span>
+          </h2>
+        </header>
+
+        <div class="mt-8 md:mt-10">
+          <PointMap client:only="react" lat={LAT} lng={LNG} label="Laisvamanių scena">
+            <div
+              slot="fallback"
+              class="h-[280px] md:h-[340px] border border-ink/30 flex items-center justify-center"
+            >
+              <p class="meta">Kraunamas žemėlapis...</p>
+            </div>
+          </PointMap>
+        </div>
+      </article>
+    </div>
+  </section>
+</Layout>
