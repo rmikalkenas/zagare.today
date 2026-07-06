@@ -124,7 +124,10 @@ const siteSchema = {
     ></script>
   </head>
   <body class="flex min-h-dvh flex-col bg-paper text-ink antialiased font-sans">
-    <header class="border-b border-ink/15">
+    <header
+      id="site-header"
+      class="sticky top-0 z-[1100] border-b border-ink/15 bg-paper/70 backdrop-blur-md transition-shadow duration-300 data-[scrolled]:shadow-[0_10px_28px_-18px_rgba(20,18,16,0.45)]"
+    >
       <div class="mx-auto flex h-14 items-center justify-between px-5 md:px-8">
         <a
           href="/"
@@ -134,7 +137,7 @@ const siteSchema = {
           <Image
             src={logoRed}
             alt=""
-            class="h-7 w-auto"
+            class="h-[42px] w-auto"
             loading="eager"
             decoding="sync"
           />
@@ -149,7 +152,7 @@ const siteSchema = {
           >
             <details class="group relative">
               <summary
-                class="meta hover:text-brand-600 transition-colors cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden"
+                class="meta text-[11px]! hover:text-brand-600 transition-colors cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden aria-[current=page]:text-brand-600"
                 aria-current={Astro.url.pathname === "/zygis-svete"
                   ? "page"
                   : undefined}
@@ -176,7 +179,7 @@ const siteSchema = {
               >
                 <a
                   href="/zygis-svete"
-                  class="meta block px-4 py-2.5 whitespace-nowrap hover:text-brand-600 hover:bg-paper-dim transition-colors"
+                  class="meta text-[11px]! block px-4 py-2.5 whitespace-nowrap hover:text-brand-600 hover:bg-paper-dim transition-colors aria-[current=page]:text-brand-600"
                   aria-current={Astro.url.pathname === "/zygis-svete"
                     ? "page"
                     : undefined}
@@ -187,7 +190,7 @@ const siteSchema = {
             </details>
             <a
               href="/kontaktai"
-              class="meta hover:text-brand-600 transition-colors"
+              class="meta text-[11px]! hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
               aria-current={Astro.url.pathname === "/kontaktai"
                 ? "page"
                 : undefined}
@@ -249,10 +252,10 @@ const siteSchema = {
           aria-label="Pagrindinė navigacija (mobili)"
           class="flex flex-col py-2"
         >
-          <span class="meta px-5 pt-4 pb-2 text-ink-soft/60">Renginiai</span>
+          <span class="meta text-[11px]! px-5 pt-4 pb-2 text-ink-soft/60">Renginiai</span>
           <a
             href="/zygis-svete"
-            class="meta px-5 py-3 text-ink hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+            class="meta text-[11px]! px-5 py-3 text-ink hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
             aria-current={Astro.url.pathname === "/zygis-svete"
               ? "page"
               : undefined}
@@ -261,7 +264,7 @@ const siteSchema = {
           </a>
           <a
             href="/kontaktai"
-            class="meta px-5 py-3 text-ink border-t border-ink/10 hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+            class="meta text-[11px]! px-5 py-3 text-ink border-t border-ink/10 hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
             aria-current={Astro.url.pathname === "/kontaktai"
               ? "page"
               : undefined}
@@ -290,6 +293,19 @@ const siteSchema = {
           if (!d.contains(e.target)) d.removeAttribute("open");
         });
       });
+
+      const header = document.getElementById("site-header");
+      if (header) {
+        let scrolled = false;
+        const onScroll = () => {
+          const next = window.scrollY > 80;
+          if (next === scrolled) return;
+          scrolled = next;
+          header.toggleAttribute("data-scrolled", next);
+        };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
 
       const toggle = document.getElementById("menu-toggle");
       const menu = document.getElementById("mobile-menu");
