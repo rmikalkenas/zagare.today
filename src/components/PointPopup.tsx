@@ -78,7 +78,7 @@ export default function PointPopup({ point }: Props) {
           km
         </p>
       )}
-      {(point.wikiUrl || point.instagramUrl) && (
+      {(point.wikiUrl || point.instagramUrl || point.facebookUrl) && (
         <div className="mt-3 flex flex-col gap-1.5">
           {point.wikiUrl && (
             <ExternalLink href={point.wikiUrl}>
@@ -87,6 +87,9 @@ export default function PointPopup({ point }: Props) {
           )}
           {point.instagramUrl && (
             <ExternalLink href={point.instagramUrl}>Instagram →</ExternalLink>
+          )}
+          {point.facebookUrl && (
+            <ExternalLink href={point.facebookUrl}>Facebook →</ExternalLink>
           )}
         </div>
       )}

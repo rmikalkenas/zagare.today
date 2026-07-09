@@ -34,6 +34,7 @@ export interface Point {
   images?: ImageMetadata[];
   wikiUrl?: string;
   instagramUrl?: string;
+  facebookUrl?: string;
 }
 
 export const CATEGORIES: Record<Category, { label: string; color: string }> = {
@@ -229,6 +230,17 @@ export const POINTS: Point[] = [
     category: "food",
     lat: 56.358717,
     lng: 23.245592,
+    facebookUrl: "https://www.facebook.com/SodybaPrieMalunoDOLCEVITA",
+  },
+  {
+    id: "svedlaukis",
+    name: "Kavinė „Švedlaukis“",
+    description: "Vietinė kavinė Žagarėje.",
+    category: "food",
+    lat: 56.3586342,
+    lng: 23.2550523,
+    images: [img("svedlaukis.webp")],
+    facebookUrl: "https://www.facebook.com/profile.php?id=100088636721862",
   },
   {
     id: "craftsmen-on-the-road",
@@ -237,6 +249,17 @@ export const POINTS: Point[] = [
     category: "crafts",
     lat: 56.358815,
     lng: 23.246143,
+    facebookUrl: "https://www.facebook.com/SodybaPrieMalunoDOLCEVITA",
+  },
+  {
+    id: "kaliausiu-fabrikelis",
+    name: "Kaliausių fabrikėlis",
+    description:
+      "Tautodailininkės Aušros Petrauskienės įkurtos kaliausių dirbtuvės ant Švėtės upės kranto - čia vedamos kaliausių kūrimo edukacijos vaikams ir suaugusiems. Per Vyšnių festivalį virsta linksmybių centru su kaliausių lenktynėmis, raliu ir gražiausios kaliausės rinkimais.",
+    category: "crafts",
+    lat: 56.3643858,
+    lng: 23.2599064,
+    facebookUrl: "https://www.facebook.com/zagares.kaliauses/",
   },
   {
     id: "piliakalnis",
@@ -272,6 +295,15 @@ export const POINTS: Point[] = [
     category: "camping",
     lat: 56.350831,
     lng: 23.224338,
+  },
+  {
+    id: "sodyba-prie-maluno",
+    name: "Sodyba prie malūno",
+    description: "Kaimo turizmo sodyba su stovyklaviete prie malūno.",
+    category: "camping",
+    lat: 56.358815,
+    lng: 23.246143,
+    facebookUrl: "https://www.facebook.com/SodybaPrieMalunoDOLCEVITA",
   },
 ];
 
