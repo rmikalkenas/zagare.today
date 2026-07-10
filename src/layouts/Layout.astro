@@ -200,6 +200,15 @@ const siteSchema = {
               </div>
             </details>
             <a
+              href="/vysniu-festivalio-zemelapis"
+              class="meta text-[11px]! hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+              aria-current={Astro.url.pathname === "/vysniu-festivalio-zemelapis"
+                ? "page"
+                : undefined}
+            >
+              Vyšnių festivalis
+            </a>
+            <a
               href="/kontaktai"
               class="meta text-[11px]! hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
               aria-current={Astro.url.pathname === "/kontaktai"
@@ -281,6 +290,15 @@ const siteSchema = {
               : undefined}
           >
             Laisvamanių scena
+          </a>
+          <a
+            href="/vysniu-festivalio-zemelapis"
+            class="meta text-[11px]! px-5 py-3 text-ink border-t border-ink/10 hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+            aria-current={Astro.url.pathname === "/vysniu-festivalio-zemelapis"
+              ? "page"
+              : undefined}
+          >
+            Vyšnių festivalis
           </a>
           <a
             href="/kontaktai"
