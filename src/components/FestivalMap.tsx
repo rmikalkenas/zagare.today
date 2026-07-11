@@ -22,6 +22,12 @@ const EMPTY_ZOOM = 15;
 const FLY_DURATION = 0.6;
 const POPUP_RESERVE = 300;
 const MARKER_COLOR = "#960000";
+const PARKING_COLOR = "#1565c0";
+
+// Marker circle color per glyph; defaults to brand red.
+const ICON_COLOR: Partial<Record<FestivalIcon, string>> = {
+  parking: PARKING_COLOR,
+};
 
 const PATH_OPTIONS = {
   color: MARKER_COLOR,
@@ -34,6 +40,8 @@ const FESTIVAL_ICON_PATHS: Record<FestivalIcon, string> = {
   cherry:
     '<path d="M2 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z"/><path d="M12 17a5 5 0 0 0 10 0c0-2.76-2.5-5-5-3-2.5-2-5 .24-5 3Z"/><path d="M7 14c3.22-2.91 4.29-8.75 5-12 1.66 2.38 4.94 9 5 12"/><path d="M22 9c-4.29 0-7.14-2.33-10-7 5.71 0 10 4.67 10 7Z"/>',
   star: '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+  parking:
+    '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
 };
 
 // One divIcon per glyph, built lazily and cached.
@@ -42,9 +50,10 @@ const ICON_CACHE = new Map<FestivalIcon, L.DivIcon>();
 function markerIcon(name: FestivalIcon = "star"): L.DivIcon {
   const cached = ICON_CACHE.get(name);
   if (cached) return cached;
+  const color = ICON_COLOR[name] ?? MARKER_COLOR;
   const glyph = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${FESTIVAL_ICON_PATHS[name]}</svg>`;
   const icon = L.divIcon({
-    html: `<div class="category-marker-bg" style="background-color:${MARKER_COLOR}">${glyph}</div>`,
+    html: `<div class="category-marker-bg" style="background-color:${color}">${glyph}</div>`,
     className: "",
     iconSize: [30, 30],
     iconAnchor: [15, 15],

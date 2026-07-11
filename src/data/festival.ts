@@ -15,7 +15,7 @@ export const img = (filename: string): ImageMetadata => {
 
 // Marker glyphs available per point (Lucide-derived). Extend FESTIVAL_ICON_PATHS
 // in FestivalMap.tsx when adding a new name here.
-export type FestivalIcon = "cherry" | "star";
+export type FestivalIcon = "cherry" | "star" | "parking";
 
 // Optional per-point programme, grouped by day.
 export interface FestivalScheduleItem {
@@ -452,5 +452,19 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
         ],
       },
     ],
+  },
+  {
+    id: "parkavimas-1",
+    name: "Automobilių stovėjimo aikštelė",
+    lat: 56.354208,
+    lng: 23.223768,
+    icon: "parking",
+  },
+  {
+    id: "parkavimas-2",
+    name: "Automobilių stovėjimo aikštelė",
+    lat: 56.351121,
+    lng: 23.230534,
+    icon: "parking",
   },
 ];
