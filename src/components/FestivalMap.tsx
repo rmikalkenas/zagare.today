@@ -24,7 +24,6 @@ const POPUP_RESERVE = 300;
 const MARKER_COLOR = "#960000";
 const PARKING_COLOR = "#1565c0";
 
-// Marker circle color per glyph; defaults to brand red.
 const ICON_COLOR: Partial<Record<FestivalIcon, string>> = {
   parking: PARKING_COLOR,
 };
