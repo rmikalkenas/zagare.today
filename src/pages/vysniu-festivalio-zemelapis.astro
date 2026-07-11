@@ -7,6 +7,11 @@ import festivalHero from "../assets/festival/vysniu-festivalis-hero.webp";
 
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const placeId = `${siteOrigin}/#place`;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+
+const FEST_START = "2026-07-16";
+const FEST_END = "2026-07-19";
+const heroImageAbs = `${siteOrigin}${festivalHero.src}`;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -35,12 +40,109 @@ const structuredData = {
     };
   }),
 };
+
+const festivalLocation = {
+  "@type": "Place",
+  name: "Žagarė",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Žagarė",
+    addressRegion: "Joniškio r.",
+    postalCode: "LT-84316",
+    addressCountry: "LT",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 56.359377,
+    longitude: 23.25505,
+  },
+};
+
+const dayToISODate = (day: string): string | null => {
+  const m = day.match(/liepos\s+(\d{1,2})\s*d\./i);
+  return m ? `2026-07-${m[1].padStart(2, "0")}` : null;
+};
+
+// One Event per (point, dated schedule day). Undated blocks ("Darbo laikas")
+// and point-only markers (parking) are skipped so no invalid dates leak out.
+const subEvents = FESTIVAL_POINTS.flatMap((p) =>
+  (p.schedule ?? []).flatMap((d) => {
+    const startDate = dayToISODate(d.day);
+    if (!startDate) return [];
+    return [
+      {
+        "@type": "Event",
+        name: `${p.name} · ${d.day}`,
+        startDate,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        location: {
+          "@type": "Place",
+          name: p.name,
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: p.lat,
+            longitude: p.lng,
+          },
+        },
+        description: d.items
+          .map((it) => (it.time ? `${it.time} ${it.text}` : it.text))
+          .join("; "),
+      },
+    ];
+  }),
+);
+
+const festivalGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Festival",
+      "@id": `${pageUrl}#festival`,
+      name: "Žagarės vyšnių festivalis 2026",
+      startDate: FEST_START,
+      endDate: FEST_END,
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      location: festivalLocation,
+      image: [heroImageAbs],
+      url: pageUrl,
+      description:
+        "Žagarės vyšnių festivalis 2026 - koncertai, scenos, parodos, amatų mugė ir veiklos visame Žagarės miestelyje liepos 16-19 d.",
+      organizer: { "@id": `${siteOrigin}/#organization` },
+      sameAs: ["https://vysniufestivalis.lt/"],
+      ...(subEvents.length > 0 && { subEvent: subEvents }),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Pradžia",
+          item: `${siteOrigin}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Vyšnių festivalis",
+          item: pageUrl,
+        },
+      ],
+    },
+  ],
+};
 ---
 
 <Layout
-  title="Vyšnių festivalio žemėlapis"
-  description="Vyšnių festivalio žemėlapis - renginio erdvės, scenos, veiklos ir vietos Žagarėje viename interaktyviame žemėlapyje."
+  title="Žagarės vyšnių festivalis 2026 - programa ir žemėlapis"
+  description="Žagarės vyšnių festivalis 2026, liepos 16-19 d. Interaktyvus žemėlapis su visomis renginio vietomis: scenos, koncertai, parodos, amatų mugė ir veiklos Žagarėje."
 >
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(festivalGraph).replace(/</g, "\\u003c")}
+    is:inline
+  />
   {
     FESTIVAL_POINTS.length > 0 && (
       <script
@@ -66,6 +168,24 @@ const structuredData = {
         >Vyšnių festivalio <span class="italic text-brand-600">žemėlapis</span></span
       >
     </h1>
+    <p
+      class="mt-6 md:mt-8 max-w-2xl font-sans text-ink-soft leading-relaxed text-[15px] md:text-base"
+    >
+      Žagarės vyšnių festivalis 2026 vyksta liepos 16-19 d. Žemėlapyje - visos
+      renginio vietos: scenos, koncertai, parodos, amatų mugė ir veiklos
+      visame Žagarės miestelyje.
+    </p>
+    <p class="mt-4 meta">
+      Daugiau informacijos:{" "}
+      <a
+        href="https://vysniufestivalis.lt/"
+        target="_blank"
+        rel="noopener"
+        class="text-brand-600 underline underline-offset-2 hover:no-underline"
+      >
+        vysniufestivalis.lt
+      </a>
+    </p>
   </section>
 
   <div class="mx-5 md:mx-8 h-px bg-ink/15"></div>
