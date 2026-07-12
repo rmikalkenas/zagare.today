@@ -33,8 +33,11 @@ export interface Point {
   lng: number;
   images?: ImageMetadata[];
   wikiUrl?: string;
+  websiteUrl?: string;
   instagramUrl?: string;
   facebookUrl?: string;
+  phone?: string;
+  hours?: { days: string; time: string }[];
 }
 
 export const CATEGORIES: Record<Category, { label: string; color: string }> = {
@@ -44,7 +47,7 @@ export const CATEGORIES: Record<Category, { label: string; color: string }> = {
   church: { label: "Bažnyčios", color: "#6b21a8" },
   pharmacy: { label: "Vaistinės", color: "#0e7490" },
   food: { label: "Maistas", color: "#b91c1c" },
-  crafts: { label: "Amatai", color: "#78350f" },
+  crafts: { label: "Amatai ir edukacijos", color: "#78350f" },
   hiking: { label: "Pažintiniai takai", color: "#166534" },
   camping: { label: "Stovyklavietės", color: "#047857" },
 };
@@ -110,6 +113,7 @@ export const POINTS: Point[] = [
     category: "attraction",
     lat: 56.361398,
     lng: 23.250185,
+    images: [img("puodu-namas.webp")],
   },
   {
     id: "norfa",
@@ -198,11 +202,18 @@ export const POINTS: Point[] = [
   },
   {
     id: "vaistine",
-    name: "Vaistinė",
-    description: "Miestelio vaistinė.",
+    name: "Gintarinė vaistinė",
+    description: "",
     category: "pharmacy",
     lat: 56.35901,
     lng: 23.254662,
+    hours: [
+      { days: "I-V", time: "8:00-18:00" },
+      { days: "VI", time: "9:00-13:00" },
+      { days: "VII", time: "nedirba" },
+    ],
+    websiteUrl: "https://www.gintarine.lt/",
+    phone: "+370 618 52578",
   },
   {
     id: "sinagogu-kompleksas",
@@ -222,6 +233,7 @@ export const POINTS: Point[] = [
     lat: 56.358901,
     lng: 23.251631,
     instagramUrl: "https://www.instagram.com/zagares_beigeliai",
+    facebookUrl: "https://www.facebook.com/profile.php?id=61570187465609",
   },
   {
     id: "dolce-vita",
@@ -235,21 +247,58 @@ export const POINTS: Point[] = [
   {
     id: "svedlaukis",
     name: "Kavinė „Švedlaukis“",
-    description: "Vietinė kavinė Žagarėje.",
+    description:
+      "Kavinėje galima pavalgyti dienos pietus, bei užsisakyti maistą išsinešimui ar pristatymui į namus. Kavinėje priimami užsakymai pobūviams.",
     category: "food",
     lat: 56.3586342,
     lng: 23.2550523,
+    phone: "+370 647 66031",
     images: [img("svedlaukis.webp")],
     facebookUrl: "https://www.facebook.com/profile.php?id=100088636721862",
   },
   {
+    id: "tiga-kebabine",
+    name: "Tiga kebabinė",
+    description: "Greito maisto užkandinė, kebabinė.",
+    category: "food",
+    lat: 56.361591,
+    lng: 23.250015,
+    facebookUrl: "https://www.facebook.com/profile.php?id=61590516220273",
+    phone: "+370 669 97933",
+  },
+  {
+    id: "rakte",
+    name: "Kavinė „Raktė“",
+    description:
+      "Kavinė dirba sezono metu (pavasarį, vasarą, rudenį). Ne sezono metu kavinėje priimami užsakymai pobūviams (būtina suderinti iš anksto).",
+    category: "food",
+    lat: 56.3598197,
+    lng: 23.2520577,
+    phone: "+370 616 88949",
+  },
+  {
     id: "craftsmen-on-the-road",
-    name: "Craftsmen On The Road",
-    description: "Vietinių amatininkų studija ir parduotuvė.",
+    name: "Juvelyrinės dirbtuvės „Craftsmen on the road“",
+    description:
+      "Juvelyrinės dirbtuvės „Craftsmen on the road“ Žagarėje kviečia kūrybinių patirčių ieškotojus susipažinti su juvelyro darbo procesu, susikurti savo originalų papuošalą iš žalvario vielos, natūralių akmenų bei rankų darbo stiklo. Edukacijos trukmė apie dvi valandas.",
     category: "crafts",
     lat: 56.358815,
     lng: 23.246143,
+    images: [img("craftsmen-on-the-road.webp")],
     facebookUrl: "https://www.facebook.com/SodybaPrieMalunoDOLCEVITA",
+    phone: "+370 637 57518",
+  },
+  {
+    id: "klecku-puota",
+    name: "Kleckų puota",
+    description:
+      "Žiemgalos kulinarinio paveldo asociacija organizuoja edukacijas - degustacijas, pristatančias Žiemgalos krašto kulinarinio paveldo pasididžiavimą: kleckus (ruginius virtinius su lašinukais ir raugintais kopūstais), sūrį (5 rūšių), zaptę (uogienę), kumpį ir lašinius, vaisinius saldainius, ruginius blynus su zapte, miežinį naminį alų, naminį vyną (vyšnių, obuolių, juodųjų serbentų), Žvelgaičių piliakalnio papėdės žolelių arbatą, sulą (pavasarį - šviežią, kitais metų laikais - raugintą). Kaina sutartinė, paprastai trukmė - iki 2 valandų. Būtina registracija telefonu.",
+    category: "crafts",
+    lat: 56.341787,
+    lng: 23.2073277,
+    images: [img("klecku-puota.webp")],
+    websiteUrl: "https://www.ziemgalospaveldas.lt/",
+    phone: "+370 685 99800",
   },
   {
     id: "kaliausiu-fabrikelis",
@@ -259,7 +308,20 @@ export const POINTS: Point[] = [
     category: "crafts",
     lat: 56.3643858,
     lng: 23.2599064,
+    images: [img("kaliausiu-fabrikelis.webp")],
     facebookUrl: "https://www.facebook.com/zagares.kaliauses/",
+    phone: "+370 612 85668",
+  },
+  {
+    id: "leliu-namai",
+    name: "Lėlių namai",
+    description:
+      "Tautodailininkė A. Petrauskienė vykdo užsakomąsias lėlių kūrybos edukacijas. Įkvepiančioje ir jaukioje lėlių muziejaus aplinkoje lankytojai praturtina žinias, susikuria pageidaujamą lėlytę atminimui bei patiria kūrybos džiaugsmą.",
+    category: "crafts",
+    lat: 56.3605795,
+    lng: 23.255343,
+    images: [img("leliu-namai.webp")],
+    phone: "+370 612 85668",
   },
   {
     id: "piliakalnis",

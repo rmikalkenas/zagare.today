@@ -459,6 +459,7 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
     lat: 56.358809,
     lng: 23.251614,
     icon: "cherry",
+    instagramUrl: "https://www.instagram.com/zagares_beigeliai",
     facebookUrl: "https://www.facebook.com/profile.php?id=61570187465609",
     schedule: [
       {
