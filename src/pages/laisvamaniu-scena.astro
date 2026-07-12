@@ -1,6 +1,8 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import PointMap from "../components/PointMap.tsx";
+import heroIllustration from "../assets/laisvamaniu-scena.webp";
 
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const pageUrl = `${siteOrigin}/laisvamaniu-scena`;
@@ -59,16 +61,32 @@ const eventSchema = {
   />
 
   <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
-    <h1 class="font-display not-italic tracking-tight leading-[0.86] text-ink">
-      <span class="block text-[clamp(2rem,6vw,4.2rem)]"
-        >Laisvamanių <span class="italic text-brand-600">scena</span></span
-      >
-    </h1>
-    <p
-      class="mt-3 font-display italic text-[clamp(1.1rem,2vw,1.5rem)] text-ink-soft"
+    <div
+      class="grid md:grid-cols-[auto_1fr] items-center gap-8 md:gap-12 lg:gap-16"
     >
-      Liepos 18 d., 19.00 val.
-    </p>
+      <div class="order-2 md:order-2">
+        <h1
+          class="font-display not-italic tracking-tight leading-[0.86] text-ink"
+        >
+          <span class="block text-[clamp(2rem,6vw,4.2rem)]"
+            >Laisvamanių <span class="italic text-brand-600">scena</span></span
+          >
+        </h1>
+        <p
+          class="mt-3 font-display italic text-[clamp(1.1rem,2vw,1.5rem)] text-ink-soft"
+        >
+          Liepos 18 d., 19.00 val.
+        </p>
+      </div>
+      <Image
+        src={heroIllustration}
+        alt="Iliustracija - dvi vyšnios, kurių vaisiai pavaizduoti kaip vinilo plokštelės, žaliais koteliais ir lapu."
+        widths={[220, 280, 320, 564]}
+        sizes="(min-width: 1024px) 320px, (min-width: 768px) 260px, 200px"
+        class="order-1 md:order-1 justify-self-center md:justify-self-start w-[200px] md:w-[260px] lg:w-[320px] h-auto"
+        loading="eager"
+      />
+    </div>
 
     <div
       class="mt-14 md:mt-24 grid md:grid-cols-2 gap-x-10 lg:gap-x-20 gap-y-16 md:gap-y-0"
