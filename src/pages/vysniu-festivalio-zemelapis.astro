@@ -41,16 +41,18 @@ const structuredData = {
   }),
 };
 
+const festivalAddress = {
+  "@type": "PostalAddress",
+  addressLocality: "Žagarė",
+  addressRegion: "Joniškio r.",
+  postalCode: "LT-84316",
+  addressCountry: "LT",
+};
+
 const festivalLocation = {
   "@type": "Place",
   name: "Žagarė",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Žagarė",
-    addressRegion: "Joniškio r.",
-    postalCode: "LT-84316",
-    addressCountry: "LT",
-  },
+  address: festivalAddress,
   geo: {
     "@type": "GeoCoordinates",
     latitude: 56.359377,
@@ -58,40 +60,77 @@ const festivalLocation = {
   },
 };
 
-const dayToISODate = (day: string): string | null => {
-  const m = day.match(/liepos\s+(\d{1,2})\s*d\./i);
-  return m ? `2026-07-${m[1].padStart(2, "0")}` : null;
+const freeOffer = {
+  "@type": "Offer",
+  price: "0",
+  priceCurrency: "EUR",
+  availability: "https://schema.org/InStock",
+  url: pageUrl,
+  validFrom: FEST_START,
 };
 
-// One Event per (point, dated schedule day). Undated blocks ("Darbo laikas")
-// and point-only markers (parking) are skipped so no invalid dates leak out.
-const subEvents = FESTIVAL_POINTS.flatMap((p) =>
-  (p.schedule ?? []).flatMap((d) => {
-    const startDate = dayToISODate(d.day);
-    if (!startDate) return [];
-    return [
-      {
-        "@type": "Event",
-        name: `${p.name} · ${d.day}`,
-        startDate,
-        eventStatus: "https://schema.org/EventScheduled",
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        location: {
-          "@type": "Place",
-          name: p.name,
-          geo: {
-            "@type": "GeoCoordinates",
-            latitude: p.lat,
-            longitude: p.lng,
-          },
+const paidOffer = {
+  "@type": "Offer",
+  price: "5",
+  priceCurrency: "EUR",
+  availability: "https://schema.org/InStock",
+  url: "https://www.bilietai.lt/renginiai/PAGQQPZVOR/zagares-regioninio-parko-lankytojo-ir-vysniu-festivalio-bilietas",
+  validFrom: FEST_START,
+};
+
+const PAID_POINT_IDS = new Set(["rekreacine-zona"]);
+
+const festivalPerformer = {
+  "@type": "PerformingGroup",
+  name: "Žagarės vyšnių festivalio atlikėjai",
+};
+
+const festivalOrganizer = {
+  "@type": "Organization",
+  name: "Žagarės vyšnių festivalis",
+  url: "https://vysniufestivalis.lt/",
+  logo: "https://vysniufestivalis.lt/wp-content/uploads/2023/06/logo.png",
+};
+
+const subEvents = FESTIVAL_POINTS.flatMap((p) => {
+  if (!p.startDate || !p.endDate) return [];
+  const eventImage = p.images?.[0]
+    ? `${siteOrigin}${p.images[0].src}`
+    : heroImageAbs;
+  return [
+    {
+      "@type": "Event",
+      name: `${p.name} - Vyšnių festivalio programa`,
+      startDate: p.startDate,
+      endDate: p.endDate,
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      location: {
+        "@type": "Place",
+        name: p.name,
+        address: festivalAddress,
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: p.lat,
+          longitude: p.lng,
         },
-        description: d.items
-          .map((it) => (it.time ? `${it.time} ${it.text}` : it.text))
-          .join("; "),
       },
-    ];
-  }),
-);
+      image: [eventImage],
+      organizer: festivalOrganizer,
+      performer: festivalPerformer,
+      offers: PAID_POINT_IDS.has(p.id) ? paidOffer : freeOffer,
+      description: (p.schedule ?? [])
+        .map(
+          (d) =>
+            `${d.day}: ` +
+            d.items
+              .map((it) => (it.time ? `${it.time} ${it.text}` : it.text))
+              .join("; "),
+        )
+        .join(" | "),
+    },
+  ];
+});
 
 const festivalGraph = {
   "@context": "https://schema.org",
@@ -109,7 +148,9 @@ const festivalGraph = {
       url: pageUrl,
       description:
         "Žagarės vyšnių festivalis 2026 - koncertai, scenos, parodos, amatų mugė ir veiklos visame Žagarės miestelyje liepos 16-19 d.",
-      organizer: { "@id": `${siteOrigin}/#organization` },
+      organizer: festivalOrganizer,
+      performer: festivalPerformer,
+      offers: freeOffer,
       sameAs: ["https://vysniufestivalis.lt/"],
       ...(subEvents.length > 0 && { subEvent: subEvents }),
     },

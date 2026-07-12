@@ -1,7 +1,5 @@
 import type { ImageMetadata } from "astro";
 
-// Auto-discover festival photos from src/assets/festival/. Reference by
-// filename only - no per-image import boilerplate when adding new points.
 const festivalImages = import.meta.glob<{ default: ImageMetadata }>(
   "../assets/festival/*.{jpg,jpeg,png,webp}",
   { eager: true },
@@ -13,23 +11,18 @@ export const img = (filename: string): ImageMetadata => {
   return mod.default;
 };
 
-// Marker glyphs available per point (Lucide-derived). Extend FESTIVAL_ICON_PATHS
-// in FestivalMap.tsx when adding a new name here.
 export type FestivalIcon = "cherry" | "star" | "parking";
 
-// Optional per-point programme, grouped by day.
 export interface FestivalScheduleItem {
-  time?: string; // single "17:00" or range "12:00-21:00" (plain hyphen only)
+  time?: string;
   text: string;
-  heading?: boolean; // render as a section sub-header spanning both columns
+  heading?: boolean;
 }
 export interface FestivalScheduleDay {
-  day: string; // e.g. "Penktadienis · liepos 17 d."
+  day: string;
   items: FestivalScheduleItem[];
 }
 
-// Flat set of festival locations - no category filtering (see Map page). Each
-// point may pick its own marker icon; defaults to "star".
 export interface FestivalPoint {
   id: string;
   name: string;
@@ -37,21 +30,24 @@ export interface FestivalPoint {
   lat: number;
   lng: number;
   icon?: FestivalIcon;
+  startDate?: string;
+  endDate?: string;
   schedule?: FestivalScheduleDay[];
   images?: ImageMetadata[];
-  path?: [number, number][]; // drawn on the map when this point is selected
+  path?: [number, number][];
   links?: { label: string; href: string }[];
   wikiUrl?: string;
   instagramUrl?: string;
   facebookUrl?: string;
 }
 
-// Žagarės miesto aikštė - fallback map view until points are added.
 export const FESTIVAL_CENTER: [number, number] = [56.359377, 23.25505];
 
 export const FESTIVAL_POINTS: FestivalPoint[] = [
   {
     id: "miesto-aikste",
+    startDate: "2026-07-17",
+    endDate: "2026-07-19",
     name: "Žagarės miesto aikštė",
     lat: 56.359377,
     lng: 23.25505,
@@ -87,6 +83,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "naujosios-zagares-baznycia",
+    startDate: "2026-07-16",
+    endDate: "2026-07-16",
     name: "Naujosios Žagarės Šv. apaštalų Petro ir Povilo bažnyčia",
     lat: 56.359293,
     lng: 23.258251,
@@ -105,6 +103,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "dvaro-rumai",
+    startDate: "2026-07-16",
+    endDate: "2026-07-18",
     name: "Žagarės dvaro rūmai",
     lat: 56.362418,
     lng: 23.26457,
@@ -146,6 +146,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "miesto-stadionas",
+    startDate: "2026-07-17",
+    endDate: "2026-07-18",
     name: "Žagarės miesto stadionas",
     lat: 56.358934,
     lng: 23.267465,
@@ -174,6 +176,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "sinagoga",
+    startDate: "2026-07-17",
+    endDate: "2026-07-19",
     name: "Žagarės sinagoga",
     lat: 56.358242,
     lng: 23.254967,
@@ -210,6 +214,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "rekreacine-zona",
+    startDate: "2026-07-17",
+    endDate: "2026-07-18",
     name: "Rekreacinė zona prie Žvelgaičių ežero",
     lat: 56.351331,
     lng: 23.225414,
@@ -281,6 +287,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "hipodromas",
+    startDate: "2026-07-18",
+    endDate: "2026-07-19",
     name: "Žagarės dvaro parko hipodromas",
     lat: 56.362781,
     lng: 23.270958,
@@ -305,6 +313,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "kulturos-centras",
+    startDate: "2026-07-18",
+    endDate: "2026-07-19",
     name: "Žagarės kultūros centras",
     lat: 56.358494,
     lng: 23.255914,
@@ -333,6 +343,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "zygis-svete",
+    startDate: "2026-07-18",
+    endDate: "2026-07-18",
     name: "Žygis Švėtės dugnu",
     lat: 56.362167,
     lng: 23.246915,
@@ -352,6 +364,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "tilto-galerija",
+    startDate: "2026-07-18",
+    endDate: "2026-07-19",
     name: "Tilto galerija",
     lat: 56.360093,
     lng: 23.251684,
@@ -369,11 +383,12 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "kaliausiu-plaukimas",
+    startDate: "2026-07-18",
+    endDate: "2026-07-18",
     name: "Švėtės upe nuo Barboros tilto iki paplūdimio Vilniaus g.",
     lat: 56.361432,
     lng: 23.253475,
     icon: "cherry",
-    // Švėtės upės vaga nuo Barboros tilto iki paplūdimio (OSM waterway).
     path: [
       [56.361432, 23.253475],
       [56.361689, 23.254168],
@@ -400,6 +415,8 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
   },
   {
     id: "leliu-namai",
+    startDate: "2026-07-19",
+    endDate: "2026-07-19",
     name: "Lėlių namai",
     lat: 56.3605795,
     lng: 23.255343,
