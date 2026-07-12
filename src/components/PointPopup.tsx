@@ -13,6 +13,15 @@ export default function PointPopup({ point }: Props) {
   const current = images[index];
   const hasMany = images.length > 1;
   const track = getTrack(point.id);
+  const hasHours = !!point.hours && point.hours.length > 0;
+  const hasLinks = !!(
+    point.wikiUrl ||
+    point.websiteUrl ||
+    point.instagramUrl ||
+    point.facebookUrl ||
+    point.phone
+  );
+  const hasMeta = hasHours || hasLinks;
 
   const prev = () =>
     setIndex((i) => (i - 1 + images.length) % images.length);
@@ -65,9 +74,11 @@ export default function PointPopup({ point }: Props) {
       <h3 className="font-display italic text-[22px] leading-[1.05] text-ink mt-1 mb-1.5">
         {point.name}
       </h3>
-      <p className="text-[13px] leading-[1.55] text-ink/80">
-        {point.description}
-      </p>
+      {point.description && (
+        <p className="text-[13px] leading-[1.55] text-ink/80">
+          {point.description}
+        </p>
+      )}
       {track && (
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-soft mt-2">
           Ilgis ·{" "}
@@ -78,8 +89,37 @@ export default function PointPopup({ point }: Props) {
           km
         </p>
       )}
-      {(point.wikiUrl || point.instagramUrl || point.facebookUrl) && (
+      {hasMeta && <div className="mt-3 border-t border-ink/15" />}
+      {hasHours && (
+        <div className="mt-3">
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-ink-soft mb-1">
+            Darbo laikas
+          </p>
+          <dl className="font-mono text-[11px] tabular-nums text-ink/80">
+            {point.hours?.map((h) => (
+              <div key={h.days} className="flex justify-between gap-3 leading-[1.6]">
+                <dt className="text-ink-soft">{h.days}</dt>
+                <dd>{h.time}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
+      {hasLinks && (
         <div className="mt-3 flex flex-col gap-1.5">
+          {point.phone && (
+            <a
+              href={`tel:${point.phone.replace(/\s/g, "")}`}
+              className="meta-link"
+            >
+              {point.phone} →
+            </a>
+          )}
+          {point.websiteUrl && (
+            <ExternalLink href={point.websiteUrl}>
+              Svetainė →
+            </ExternalLink>
+          )}
           {point.wikiUrl && (
             <ExternalLink href={point.wikiUrl}>
               Skaityti Wikipedia →
