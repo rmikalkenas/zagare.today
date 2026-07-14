@@ -175,7 +175,7 @@ const eventSchema = {
           >
           </p>
 
-          <div class="flex flex-col gap-2">
+          <div class="field flex flex-col gap-2">
             <label for="name" class="meta">Vardas</label>
             <input
               id="name"
@@ -188,7 +188,7 @@ const eventSchema = {
             />
           </div>
 
-          <div class="flex flex-col gap-2">
+          <div class="field flex flex-col gap-2">
             <label for="email" class="meta">El. paštas</label>
             <input
               id="email"
@@ -295,9 +295,15 @@ const eventSchema = {
       slotsEls.forEach((el) => {
         el.textContent = String(slotsLeft);
       });
-      if (full && submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Registracija baigta";
+      if (full) {
+        // No seats left: collapse the form to just the disabled button.
+        form
+          ?.querySelectorAll<HTMLElement>(".field, .cf-turnstile")
+          .forEach((el) => el.classList.add("hidden"));
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Vietų į žygį nebėra";
+        }
       }
     }
 
