@@ -262,15 +262,15 @@ export const FESTIVAL_POINTS: FestivalPoint[] = [
           { time: "16:45-17:40", text: "DJ Rubin" },
           { time: "17:40-18:50", text: "„Baltic Rock Project“" },
           {
-            time: "18:50-20:35",
+            time: "18:50-20:30",
             text: "Brolių Tautkų Rondo ir Šampaninis Kauno choras",
           },
-          { time: "20:35-21:35", text: "Beissoul ir Einius" },
+          { time: "20:30-21:30", text: "Beissoul ir Einius" },
           {
             time: "21:35-22:50",
             text: "Monika Liu ir mini orkestras „Los Secretos de Pablo“",
           },
-          { time: "22:50-00:00", text: "Adomas Vyšniauskas" },
+          { time: "23:00-23:45", text: "Adomas Vyšniauskas" },
           { time: "00:00-01:15", text: "„Poliarizuoti stiklai“" },
           { time: "01:15-01:45", text: "DJ laisvamanis" },
           { time: "01:45-03:00", text: "Orkesta Mendoza (Meksika)" },
