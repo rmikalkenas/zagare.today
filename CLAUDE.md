@@ -37,12 +37,15 @@ src/
     points/         Photos for map points, WebP, ≤700px max dimension
   components/
     Map.tsx         The React island: filter TOC + map + popups
+    BaseTileLayer.tsx  Shared CARTO tile layer (key + attribution)
   data/
     points.ts       Point[] array, CATEGORIES record, image imports
+    events.ts       EventItem[] + splitEvents() - drives /renginiai and nav
   layouts/
     Layout.astro    Shared shell: <head>, header, <slot />
   pages/
     index.astro     Hero + map
+    renginiai.astro Events index: upcoming / past split
     kontaktai.astro Contacts page (email + Facebook)
   styles/
     global.css      Tailwind + @theme tokens + Leaflet popup overrides
@@ -216,6 +219,31 @@ number of seats.
 - **Local dev**: `astro dev` does NOT run Functions. Use
   `npm run build && npx wrangler pages dev dist --kv ZYGIS_SVETE
   --binding TURNSTILE_SECRET=1x0000000000000000000000000000000AA` (test secret).
+
+## Events - `src/data/events.ts` + `/renginiai`
+
+Each event has its own hand-written editorial page at a **root URL**
+(`/zygis-svete`, `/laisvamaniu-scena`) - they are not under `/renginiai/`, and
+those URLs must not move. `/renginiai` is only an **index**: it lists events
+split into "I. Artimiausi" and "II. Jau įvyko", newest-first within each.
+
+`events.ts` holds the index-card metadata (`href`, `name`, `startDate`,
+`dateLabel`, `location`, `summary`, `image`). It is deliberately a **summary**
+of each event page, not its source of truth - the pages own their own copy,
+schema.org graph, maps and forms. Keep `startDate` and `dateLabel` in sync with
+the page by hand.
+
+`splitEvents()` decides past vs upcoming by comparing `endDate ?? startDate`
+against `new Date()`. **This runs at build time**, so an event only moves to
+"Jau įvyko" on the next deploy - a site left un-deployed keeps showing a
+finished event as upcoming. If that ever matters, add a scheduled Cloudflare
+deploy hook.
+
+The header's "Renginiai" link is highlighted on `/renginiai` and on any
+`EVENTS[].href`, so adding an event needs no nav edit.
+
+Adding an event: create the page at `src/pages/<slug>.astro`, add its hero
+illustration to `src/assets/`, then prepend an entry to `EVENTS`.
 
 ## Build-time env vars (Pages -> Variables and secrets)
 

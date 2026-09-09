@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css";
 import "../styles/global.css";
 import { Image } from "astro:assets";
 import logoRed from "../assets/logos/ZFT_logo-02.svg";
+import { EVENTS } from "../data/events";
 
 interface Props {
   title?: string;
@@ -23,6 +24,13 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const ogImage = new URL("/og.png", Astro.site).toString();
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const year = new Date().getFullYear();
+
+// The "Renginiai" nav item stays highlighted on the index and on every
+// individual event page, so it never needs updating when an event is added.
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isEventsSection =
+  currentPath === "/renginiai" ||
+  EVENTS.some((event) => event.href === currentPath);
 
 const siteSchema = {
   "@context": "https://schema.org",
@@ -151,55 +159,13 @@ const siteSchema = {
             aria-label="Pagrindinė navigacija"
             class="hidden md:flex items-center gap-5 md:gap-8"
           >
-            <details class="group relative">
-              <summary
-                class="meta text-[11px]! hover:text-brand-600 transition-colors cursor-pointer list-none flex items-center gap-1 [&::-webkit-details-marker]:hidden aria-[current=page]:text-brand-600"
-                aria-current={["/zygis-svete", "/laisvamaniu-scena"].includes(
-                  Astro.url.pathname,
-                )
-                  ? "page"
-                  : undefined}
-              >
-                Renginiai
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="transition-transform group-open:rotate-180"
-                  aria-hidden="true"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </summary>
-              <div
-                class="absolute right-0 z-50 mt-3 min-w-max border border-ink/15 bg-paper"
-              >
-                <a
-                  href="/zygis-svete"
-                  class="meta text-[11px]! block px-4 py-2.5 whitespace-nowrap hover:text-brand-600 hover:bg-paper-dim transition-colors aria-[current=page]:text-brand-600"
-                  aria-current={Astro.url.pathname === "/zygis-svete"
-                    ? "page"
-                    : undefined}
-                >
-                  Žygis Švėtės dugnu
-                </a>
-                <a
-                  href="/laisvamaniu-scena"
-                  class="meta text-[11px]! block px-4 py-2.5 whitespace-nowrap hover:text-brand-600 hover:bg-paper-dim transition-colors aria-[current=page]:text-brand-600"
-                  aria-current={Astro.url.pathname === "/laisvamaniu-scena"
-                    ? "page"
-                    : undefined}
-                >
-                  Laisvamanių scena
-                </a>
-              </div>
-            </details>
+            <a
+              href="/renginiai"
+              class="meta text-[11px]! hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
+              aria-current={isEventsSection ? "page" : undefined}
+            >
+              Renginiai
+            </a>
             <a
               href="/kontaktai"
               class="meta text-[11px]! hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
@@ -264,24 +230,12 @@ const siteSchema = {
           aria-label="Pagrindinė navigacija (mobili)"
           class="flex flex-col py-2"
         >
-          <span class="meta text-[11px]! px-5 pt-4 pb-2 text-ink-soft/60">Renginiai</span>
           <a
-            href="/zygis-svete"
+            href="/renginiai"
             class="meta text-[11px]! px-5 py-3 text-ink hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
-            aria-current={Astro.url.pathname === "/zygis-svete"
-              ? "page"
-              : undefined}
+            aria-current={isEventsSection ? "page" : undefined}
           >
-            Žygis Švėtės dugnu
-          </a>
-          <a
-            href="/laisvamaniu-scena"
-            class="meta text-[11px]! px-5 py-3 text-ink hover:text-brand-600 transition-colors aria-[current=page]:text-brand-600"
-            aria-current={Astro.url.pathname === "/laisvamaniu-scena"
-              ? "page"
-              : undefined}
-          >
-            Laisvamanių scena
+            Renginiai
           </a>
           <a
             href="/kontaktai"
@@ -309,12 +263,6 @@ const siteSchema = {
       <span>© {year} Žagarė for today</span>
     </footer>
     <script is:inline>
-      document.addEventListener("click", (e) => {
-        document.querySelectorAll("nav details[open]").forEach((d) => {
-          if (!d.contains(e.target)) d.removeAttribute("open");
-        });
-      });
-
       const header = document.getElementById("site-header");
       if (header) {
         let scrolled = false;
