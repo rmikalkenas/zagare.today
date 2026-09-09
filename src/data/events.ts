@@ -1,6 +1,7 @@
 import type { ImageMetadata } from "astro";
 
 import laisvamaniuScena from "../assets/laisvamaniu-scena.webp";
+import zygisPoZagare from "../assets/zygis-po-zagare.webp";
 import zygisSvete from "../assets/zygis-svete.webp";
 
 export interface EventItem {
@@ -16,12 +17,25 @@ export interface EventItem {
   location: string;
   /** One or two sentences for the index card. */
   summary: string;
-  image: ImageMetadata;
-  imageAlt: string;
+  /** Hero illustration. Optional - the index card falls back to a placeholder. */
+  image?: ImageMetadata;
+  imageAlt?: string;
 }
 
 /** Newest first. Both sections on /renginiai preserve this order. */
 export const EVENTS: EventItem[] = [
+  {
+    href: "/zygis-po-zagare",
+    name: "Šiltnamis. Žygis po Žagarę ir jos apylinkes",
+    startDate: "2026-09-20T15:30:00+03:00",
+    dateLabel: "Rugsėjo 20 d., 15.30 val.",
+    location: "Žagarės miesto aikštė",
+    summary:
+      "Patirtinis žygis po miestą su istorike Alma Kančialskiene, žiemgalių skonių edukacija prie Žvelgaičio kalno ir krašto produktų degustacija. Nemokama, būtina registracija.",
+    image: zygisPoZagare,
+    imageAlt:
+      "Iliustracija - žalio šiltnamio kontūras, gaubiantis Žagarės kraštovaizdį su balta raudonstoge bažnyčia, upe, tilteliu ir medžiais.",
+  },
   {
     href: "/zygis-svete",
     name: "Žygis Švėtės dugnu",

@@ -99,14 +99,23 @@ const sections: { label: string; items: EventItem[]; muted: boolean }[] = [
                       {String(i + 1).padStart(2, "0")}
                     </span>
 
-                    <Image
-                      src={event.image}
-                      alt=""
-                      widths={[64, 112, 128, 224]}
-                      sizes="(min-width: 768px) 112px, 64px"
-                      class="w-16 md:w-[112px] h-auto"
-                      loading="lazy"
-                    />
+                    {event.image ? (
+                      <Image
+                        src={event.image}
+                        alt=""
+                        widths={[64, 112, 128, 224]}
+                        sizes="(min-width: 768px) 112px, 64px"
+                        class="w-16 md:w-[112px] h-auto"
+                        loading="lazy"
+                      />
+                    ) : (
+                      /* Placeholder keeps the text column aligned until the
+                         event gets its illustration. */
+                      <span
+                        aria-hidden="true"
+                        class="w-16 md:w-[112px] aspect-square border border-ink/15 bg-paper-dim/40"
+                      />
+                    )}
 
                     <div class="col-start-3">
                       <h3

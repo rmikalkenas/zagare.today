@@ -50,6 +50,7 @@ src/
   pages/
     index.astro     Hero + map
     renginiai.astro Events index: upcoming / past split
+    zygis-po-zagare.astro   Event page + registration form
     kontaktai.astro Contacts page (email + Facebook)
   styles/
     global.css      Tailwind + @theme tokens + Leaflet popup overrides
@@ -193,35 +194,48 @@ tolerance) down to a few dozen points, then save as
 - Leaflet touches `window`, so the map island uses `client:only="react"`
   (no SSR for that component).
 
-## Event registration - `/zygis-svete`
+## Event registration - generic Function
 
-The only server-side piece in the project. Registration form for the "Žygis
-Švėtės upe" event (during the Vyšnių festivalis), capped at a configurable
-number of seats.
+The only server-side piece in the project: one reusable Cloudflare Pages
+Function that any event page can post to.
 
-- **Page**: `src/pages/zygis-svete.astro` - editorial form (Vardas + El. paštas),
-  posts JSON via `fetch` to the Function (native submit is blocked by the
-  `form-action 'none'` CSP, which is intentional). Shows live "liko vietų" and
-  Lithuanian status messages.
-- **Function**: `functions/api/zygis-svete.ts` (a Cloudflare Pages Function at
-  `/api/zygis-svete`). `GET` returns availability; `POST` registers one person.
-  Validation, dedup, cap, honeypot, and Turnstile verification all server-side.
-- **Storage**: Workers **KV**, bound as **`ZYGIS_SVETE`** (Pages -> Settings ->
-  Bindings). One `reg:<email>` key per registrant (lowercased email = dedup
-  key); count is derived by listing the `reg:` prefix. KV is eventually
-  consistent and the cap check is not atomic, so the cap can overshoot under a
-  burst - accepted for a small event. Read registrations in the dashboard: KV ->
-  `zagare-today` -> KV Pairs -> prefix `reg:`.
+- **Function**: `functions/api/registracija/[event].ts`, served at
+  `/api/registracija/<event>`. `GET` returns availability; `POST` registers one
+  person. Validation, dedup, cap, honeypot and Turnstile verification are all
+  server-side.
+- **Event registry**: the `EVENTS` record at the top of that file is the
+  allow-list - `{ "<slug>": { max: 30 } }`, where `<slug>` must match the page
+  slug. Anything not listed **404s**, so a guessed URL cannot create keys.
+  Adding an event needs a code entry, not Cloudflare config.
+- **Storage**: Workers **KV**, bound as **`REGISTRATIONS`** (namespace
+  `zagare-registrations`). One `<slug>:reg:<email>` key per registrant
+  (lowercased email = dedup key); count is derived by listing the
+  `<slug>:reg:` prefix. KV is eventually consistent and the cap check is not
+  atomic, so the cap can overshoot under a burst - accepted for small events.
+  Read registrations in the dashboard: KV -> `zagare-registrations` -> KV Pairs
+  -> prefix `<slug>:reg:`.
+- **Page side**: each event page owns its own form + client script and sets
+  `ENDPOINT` to its own slug. The form posts JSON via `fetch` - native submit
+  is blocked by the `form-action 'none'` CSP, which is intentional. Shows live
+  "liko vietų" and Lithuanian status messages.
 - **Spam**: hidden honeypot field `website` + Cloudflare **Turnstile** (Managed,
   `interaction-only`). The Function verifies the token via siteverify and
-  **fails closed (503)** if `TURNSTILE_SECRET` is unset.
+  **fails closed (503)** if `TURNSTILE_SECRET` is unset. The Turnstile script
+  tag carries no SRI hash on purpose - Cloudflare serves a versionless
+  `api.js` and pinning a hash would break the widget on their next update.
 - **Config (Pages -> Variables and secrets)**:
   - `PUBLIC_TURNSTILE_SITEKEY` - plaintext **build** var (inlined into client
     JS); falls back to Cloudflare's test sitekey if unset.
   - `TURNSTILE_SECRET` - encrypted **runtime** secret; **required** in prod.
-  - `MAX_REGISTRATIONS` - optional cap (default 30; `"0"` closes registration).
+  - `MAX_REGISTRATIONS` - optional global override. It only ever **tightens**
+    the registry cap (`min(env, code)`), so it cannot open an event wider than
+    declared. `"0"` closes registration for every event without a deploy.
+- **Legacy**: the `ZYGIS_SVETE` binding (namespace `zagare-today`) still holds
+  the 2026 Žygis Švėtės dugnu registrants under a bare `reg:` prefix. Nothing
+  reads it any more - that page's form was retired and now shows a static
+  "Vietų į žygį nebėra".
 - **Local dev**: `astro dev` does NOT run Functions. Use
-  `npm run build && npx wrangler pages dev dist --kv ZYGIS_SVETE
+  `npm run build && npx wrangler pages dev dist --kv REGISTRATIONS
   --binding TURNSTILE_SECRET=1x0000000000000000000000000000000AA` (test secret).
 
 ## Events - `src/data/events.ts` + `/renginiai`
@@ -235,7 +249,8 @@ split into "I. Artimiausi" and "II. Jau įvyko", newest-first within each.
 `dateLabel`, `location`, `summary`, `image`). It is deliberately a **summary**
 of each event page, not its source of truth - the pages own their own copy,
 schema.org graph, maps and forms. Keep `startDate` and `dateLabel` in sync with
-the page by hand.
+the page by hand. `image` is optional - a card without one renders a bordered
+placeholder square so the text column stays aligned.
 
 `splitEvents()` decides past vs upcoming by comparing `endDate ?? startDate`
 against `new Date()`. **This runs at build time**, so an event only moves to
@@ -247,7 +262,10 @@ The header's "Renginiai" link is highlighted on `/renginiai` and on any
 `EVENTS[].href`, so adding an event needs no nav edit.
 
 Adding an event: create the page at `src/pages/<slug>.astro`, add its hero
-illustration to `src/assets/`, then prepend an entry to `EVENTS`.
+illustration to `src/assets/`, then prepend an entry to `EVENTS`. If the event
+takes registrations, also add `<slug>` to the `EVENTS` registry in
+`functions/api/registracija/[event].ts` and point the page's `ENDPOINT` at
+`/api/registracija/<slug>`.
 
 ## Build-time env vars (Pages -> Variables and secrets)
 

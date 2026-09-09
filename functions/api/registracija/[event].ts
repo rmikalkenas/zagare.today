@@ -5,15 +5,27 @@ interface KVNamespace {
 }
 
 interface Env {
-  ZYGIS_SVETE: KVNamespace;
+  REGISTRATIONS: KVNamespace;
+  /** Global emergency override. "0" closes registration for every event. */
   MAX_REGISTRATIONS?: string;
   TURNSTILE_SECRET?: string;
 }
 
-type Ctx = { request: Request; env: Env };
+type Ctx = {
+  request: Request;
+  env: Env;
+  params: { event: string | string[] };
+};
 
-const DEFAULT_MAX = 30;
-const KEY_PREFIX = "reg:";
+/**
+ * Events that accept registrations, and their seat caps. An event id must
+ * match the page slug. Anything not listed here 404s, so a stale or guessed
+ * URL cannot create keys.
+ */
+const EVENTS: Record<string, { max: number }> = {
+  "zygis-po-zagare": { max: 30 },
+};
+
 const MAX_NAME = 80;
 const MAX_EMAIL = 120;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,11 +52,6 @@ async function verifyTurnstile(
   }
 }
 
-function maxFrom(env: Env): number {
-  const n = parseInt(env.MAX_REGISTRATIONS ?? "", 10);
-  return Number.isFinite(n) && n >= 0 ? n : DEFAULT_MAX;
-}
-
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -55,20 +62,48 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-async function count(env: Env): Promise<number> {
-  const { keys } = await env.ZYGIS_SVETE.list({ prefix: KEY_PREFIX });
+/** Resolves the route param against the registry, or null when unknown. */
+function resolveEvent(
+  params: Ctx["params"],
+  env: Env,
+): { id: string; prefix: string; max: number } | null {
+  const raw = Array.isArray(params.event) ? params.event[0] : params.event;
+  const id = typeof raw === "string" ? raw.toLowerCase() : "";
+  const entry = EVENTS[id];
+  if (!entry) return null;
+
+  // The env var only ever tightens the cap, so a stray value cannot open an
+  // event wider than its code-declared limit.
+  const override = parseInt(env.MAX_REGISTRATIONS ?? "", 10);
+  const max =
+    Number.isFinite(override) && override >= 0
+      ? Math.min(override, entry.max)
+      : entry.max;
+
+  return { id, prefix: `${id}:reg:`, max };
+}
+
+async function count(env: Env, prefix: string): Promise<number> {
+  const { keys } = await env.REGISTRATIONS.list({ prefix });
   return keys.length;
 }
 
-export const onRequestGet = async ({ env }: Ctx): Promise<Response> => {
-  const max = maxFrom(env);
-  const used = await count(env);
-  const slotsLeft = Math.max(0, max - used);
-  return json({ count: used, max, slotsLeft, full: slotsLeft === 0 });
+export const onRequestGet = async ({ env, params }: Ctx): Promise<Response> => {
+  const event = resolveEvent(params, env);
+  if (!event) return json({ ok: false, status: "unknown" }, 404);
+
+  const used = await count(env, event.prefix);
+  const slotsLeft = Math.max(0, event.max - used);
+  return json({ count: used, max: event.max, slotsLeft, full: slotsLeft === 0 });
 };
 
-export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> => {
-  const max = maxFrom(env);
+export const onRequestPost = async ({
+  request,
+  env,
+  params,
+}: Ctx): Promise<Response> => {
+  const event = resolveEvent(params, env);
+  if (!event) return json({ ok: false, status: "unknown" }, 404);
 
   let body: {
     name?: unknown;
@@ -82,6 +117,7 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     return json({ ok: false, status: "invalid" }, 400);
   }
 
+  // Honeypot: pretend it worked so bots do not learn they were caught.
   if (typeof body.website === "string" && body.website.trim() !== "") {
     return json({ ok: true, status: "ok" });
   }
@@ -113,21 +149,21 @@ export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> =>
     return json({ ok: false, status: "invalid" }, 400);
   }
 
-  const key = KEY_PREFIX + email;
-  if ((await env.ZYGIS_SVETE.get(key)) !== null) {
+  const key = event.prefix + email;
+  if ((await env.REGISTRATIONS.get(key)) !== null) {
     return json({ ok: false, status: "duplicate" }, 409);
   }
 
-  const used = await count(env);
-  if (used >= max) {
+  const used = await count(env, event.prefix);
+  if (used >= event.max) {
     return json({ ok: false, status: "full" }, 409);
   }
 
-  await env.ZYGIS_SVETE.put(
+  await env.REGISTRATIONS.put(
     key,
-    JSON.stringify({ name, email, ts: new Date().toISOString() }),
+    JSON.stringify({ name, email, event: event.id, ts: new Date().toISOString() }),
   );
 
-  const slotsLeft = Math.max(0, max - (used + 1));
+  const slotsLeft = Math.max(0, event.max - (used + 1));
   return json({ ok: true, status: "ok", slotsLeft });
 };
