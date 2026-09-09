@@ -12,7 +12,8 @@ Cloudflare).
 
 ## Stack
 
-- **Astro 6** (static output) with file-based routing in `src/pages/`.
+- **Astro 7** (static output, Vite 8, Rust compiler) with file-based routing in
+  `src/pages/`.
 - **React 19** as an Astro island, only for the interactive map (`client:only="react"`).
 - **Tailwind CSS v4** via `@tailwindcss/vite`. Theme tokens live in
   `src/styles/global.css` under `@theme { … }` - there is **no** `tailwind.config.js`.
@@ -23,7 +24,10 @@ Cloudflare).
   `PUBLIC_CARTO_KEY` (public by design - it lands in the tile URLs the browser
   requests). All three maps share one `src/components/BaseTileLayer.tsx`, which
   appends `?key=…` and carries the required OSM + CARTO attribution.
-- **TypeScript** strict (`astro/tsconfigs/strict`).
+- **TypeScript 6** strict (`astro/tsconfigs/strict`). Held at 6.x on purpose:
+  TypeScript 7's native compiler does not expose the programmatic API that
+  `astro check` needs, so `npm run check` (a CI step) fails on it. Track
+  https://github.com/withastro/roadmap/discussions/1321 before bumping.
 - **Fonts** self-hosted via `@fontsource/*` (bundled, no external requests):
   **Instrument Serif** (display, italic capable), **IBM Plex Sans** (UI/body),
   **IBM Plex Mono** (metadata).
