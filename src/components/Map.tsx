@@ -5,9 +5,10 @@ import {
   Marker,
   Polyline,
   Popup,
-  TileLayer,
   useMap,
 } from "react-leaflet";
+
+import BaseTileLayer from "./BaseTileLayer";
 
 import {
   CATEGORIES,
@@ -121,10 +122,7 @@ export default function MapExperience() {
               marker={selectedMarker}
               openTick={openTick}
             />
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
+            <BaseTileLayer />
             {visible.map((p) => (
               <Marker
                 key={p.id}
