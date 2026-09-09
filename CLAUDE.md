@@ -16,8 +16,13 @@ Cloudflare).
 - **React 19** as an Astro island, only for the interactive map (`client:only="react"`).
 - **Tailwind CSS v4** via `@tailwindcss/vite`. Theme tokens live in
   `src/styles/global.css` under `@theme { … }` - there is **no** `tailwind.config.js`.
-- **Leaflet + react-leaflet** with **CartoDB Positron** tiles (free, no API
-  key). OSM + CARTO attribution is required and is rendered by Leaflet.
+- **Leaflet + react-leaflet** with **CartoDB Positron** tiles. Since August
+  2026 CARTO requires a **free API key** (5M tiles/month, no account needed,
+  self-serve at https://carto.com/basemaps/apikey) - without one the tiles are
+  stamped with an "API KEY REQUIRED" watermark. The key is a **build** var
+  `PUBLIC_CARTO_KEY` (public by design - it lands in the tile URLs the browser
+  requests). All three maps share one `src/components/BaseTileLayer.tsx`, which
+  appends `?key=…` and carries the required OSM + CARTO attribution.
 - **TypeScript** strict (`astro/tsconfigs/strict`).
 - **Fonts** self-hosted via `@fontsource/*` (bundled, no external requests):
   **Instrument Serif** (display, italic capable), **IBM Plex Sans** (UI/body),
@@ -211,6 +216,18 @@ number of seats.
 - **Local dev**: `astro dev` does NOT run Functions. Use
   `npm run build && npx wrangler pages dev dist --kv ZYGIS_SVETE
   --binding TURNSTILE_SECRET=1x0000000000000000000000000000000AA` (test secret).
+
+## Build-time env vars (Pages -> Variables and secrets)
+
+Astro only exposes `PUBLIC_`-prefixed vars to client code, and they are
+**inlined at build time** - changing one in Cloudflare requires a redeploy, not
+just a restart.
+
+- `PUBLIC_CARTO_KEY` - CARTO basemap key (see Stack). Without it the map still
+  renders but every tile carries an "API KEY REQUIRED" watermark.
+- `PUBLIC_TURNSTILE_SITEKEY` - see "Event registration" below.
+
+Locally, put them in a git-ignored `.env` at the repo root.
 
 ## Commands
 

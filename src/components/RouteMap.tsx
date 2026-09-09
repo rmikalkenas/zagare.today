@@ -1,5 +1,7 @@
 import L from "leaflet";
-import { MapContainer, Marker, Polyline, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Polyline } from "react-leaflet";
+
+import BaseTileLayer from "./BaseTileLayer";
 
 const ROUTE: [number, number][] = [
   [56.3622689, 23.24708],
@@ -60,10 +62,7 @@ export default function RouteMap() {
         className="h-full w-full"
         zoomControl={false}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        />
+        <BaseTileLayer />
         <Polyline positions={ROUTE} pathOptions={PATH_OPTIONS} />
         <Marker position={ROUTE[0]} icon={START_ICON} />
         <Marker position={ROUTE[ROUTE.length - 1]} icon={END_ICON} />

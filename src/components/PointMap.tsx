@@ -1,5 +1,6 @@
 import L from "leaflet";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { MapContainer, Marker } from "react-leaflet";
+import BaseTileLayer from "./BaseTileLayer";
 
 interface Props {
   lat: number;
@@ -31,10 +32,7 @@ export default function PointMap({ lat, lng, label }: Props) {
         className="h-full w-full"
         zoomControl={false}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        />
+        <BaseTileLayer />
         <Marker position={position} icon={pinIcon("#960000", label)} />
       </MapContainer>
     </div>
