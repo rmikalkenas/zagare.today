@@ -1,0 +1,144 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import { splitEvents, stampDate, type EventItem } from "../data/events";
+
+const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+const pageUrl = `${siteOrigin}/renginiai`;
+
+const { upcoming, past } = splitEvents();
+
+const eventsSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${pageUrl}#collectionpage`,
+      url: pageUrl,
+      name: "Renginiai - Žagarė for today",
+      inLanguage: "lt-LT",
+      isPartOf: { "@id": `${siteOrigin}/#website` },
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${pageUrl}#itemlist`,
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: upcoming.length + past.length,
+      itemListElement: [...upcoming, ...past].map((event, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: event.name,
+        item: `${siteOrigin}${event.href}`,
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Pradžia",
+          item: `${siteOrigin}/`,
+        },
+        { "@type": "ListItem", position: 2, name: "Renginiai", item: pageUrl },
+      ],
+    },
+  ],
+};
+
+const sections: { label: string; items: EventItem[]; muted: boolean }[] = [
+  { label: "I. Artimiausi", items: upcoming, muted: false },
+  { label: "II. Jau įvyko", items: past, muted: true },
+];
+---
+
+<Layout
+  title="Renginiai | Žagarė for today"
+  description="Žagarės renginiai - artimiausi ir jau įvykę. Žygiai, koncertai ir bendruomenės iniciatyvos, kurias rengia asociacija „Žagarės laisvamaniai“."
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(eventsSchema).replace(/</g, "\\u003c")}
+    is:inline
+  />
+
+  <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
+    <h1 class="font-display not-italic tracking-tight leading-[0.86] text-ink">
+      <span class="block text-[clamp(2rem,6vw,4.2rem)]">Renginiai</span>
+      <span
+        class="block italic text-[clamp(1rem,2.2vw,1.5rem)] pl-[0.5em] text-ink-soft mt-2"
+        >kas vyksta, kas jau praėjo</span
+      >
+    </h1>
+
+    {
+      sections.map(({ label, items, muted }) => (
+        <section class="mt-14 md:mt-20">
+          <header class="border-t border-ink/25 pt-4">
+            <h2 class="meta">{label}</h2>
+          </header>
+
+          {items.length === 0 ? (
+            <p class="mt-8 font-display italic text-[clamp(1.1rem,2vw,1.5rem)] text-ink-soft">
+              Šiuo metu nieko suplanuoto - sekite naujienas.
+            </p>
+          ) : (
+            <ol class="mt-2 divide-y divide-ink/10 border-b border-ink/10">
+              {items.map((event, i) => (
+                <li>
+                  <a
+                    href={event.href}
+                    class="group grid grid-cols-[1.75rem_4rem_1fr] md:grid-cols-[3.5rem_7rem_1fr_auto] items-start gap-x-3 md:gap-x-8 py-6 md:py-8"
+                  >
+                    <span
+                      class:list={[
+                        "meta pt-1",
+                        muted ? "text-ink-soft/60" : "text-brand-600",
+                      ]}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+
+                    <Image
+                      src={event.image}
+                      alt=""
+                      widths={[64, 112, 128, 224]}
+                      sizes="(min-width: 768px) 112px, 64px"
+                      class="w-16 md:w-[112px] h-auto"
+                      loading="lazy"
+                    />
+
+                    <div class="col-start-3">
+                      <h3
+                        class:list={[
+                          "font-display not-italic text-[clamp(1.4rem,2.6vw,2rem)] leading-[1.15] transition-colors group-hover:text-brand-600",
+                          muted ? "text-ink-soft" : "text-ink",
+                        ]}
+                      >
+                        {event.name}
+                      </h3>
+                      <p class="meta mt-2 text-ink-soft">
+                        {event.dateLabel} · {event.location}
+                      </p>
+                      <p
+                        class="mt-3 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft max-w-[62ch]"
+                      >
+                        {event.summary}
+                      </p>
+                    </div>
+
+                    <span
+                      class="meta hidden md:block pt-1 text-right whitespace-nowrap text-ink-soft/70 transition-colors group-hover:text-brand-600"
+                    >
+                      {stampDate(event.startDate)}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
+      ))
+    }
+  </section>
+</Layout>
