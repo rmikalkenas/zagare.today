@@ -1,0 +1,484 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PointMap from "../components/PointMap.tsx";
+import heroIllustration from "../assets/zygis-po-zagare.webp";
+
+const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
+const pageUrl = `${siteOrigin}/zygis-po-zagare`;
+
+const LAT = 56.35932045025503;
+const LNG = 23.255070058645167;
+
+const TURNSTILE_SITEKEY =
+  import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? "1x00000000000000000000AA";
+
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Pradžia", item: `${siteOrigin}/` },
+        { "@type": "ListItem", position: 2, name: "Renginiai", item: `${siteOrigin}/renginiai` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Šiltnamis. Žygis po Žagarę ir jos apylinkes",
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      "@type": "Event",
+      name: "Šiltnamis. Žygis po Žagarę ir jos apylinkes",
+      description:
+        "Patirtinis žygis po Žagarę ir jos apylinkes: pažintinis žygis po miestą su istorike Alma Kančialskiene, žiemgalių skonių edukacija prie Žvelgaičio kalno su Lina Vaitekūniene ir Žagarės bei Joniškio krašto produktų degustacija.",
+      startDate: "2026-09-20T15:30:00+03:00",
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      url: pageUrl,
+      isAccessibleForFree: true,
+      maximumAttendeeCapacity: 30,
+      location: {
+        "@type": "Place",
+        name: "Žagarės miesto aikštė",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Žagarė",
+          addressRegion: "Joniškio r.",
+          addressCountry: "LT",
+        },
+        geo: { "@type": "GeoCoordinates", latitude: LAT, longitude: LNG },
+      },
+      offers: {
+        "@type": "Offer",
+        price: 0,
+        priceCurrency: "EUR",
+        url: pageUrl,
+        availability: "https://schema.org/InStock",
+      },
+    },
+  ],
+};
+---
+
+<Layout
+  title="Šiltnamis. Žygis po Žagarę ir jos apylinkes - registracija | Žagarė for today"
+  description="Rugsėjo 20 d. 15.30 val. - patirtinis žygis po Žagarę ir jos apylinkes su istorike Alma Kančialskiene ir žolininke Lina Vaitekūniene. Nemokama, būtina registracija."
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(eventSchema).replace(/</g, "\\u003c")}
+    is:inline
+  />
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+    is:inline></script>
+
+  <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
+    <div
+      class="grid md:grid-cols-[auto_1fr] items-center gap-8 md:gap-12 lg:gap-16"
+    >
+      <div class="order-2 md:order-2">
+        <h1
+          class="font-display italic tracking-tight leading-[0.94] text-[clamp(2rem,6vw,4.2rem)]"
+        >
+          <span class="block text-ink">Šiltnamis</span>{" "}
+          <span class="block text-brand-600">Žygis po Žagarę ir jos apylinkes</span>
+        </h1>
+        <p
+          class="mt-3 font-display italic text-[clamp(1.1rem,2vw,1.5rem)] text-ink-soft"
+        >
+          Rugsėjo 20 d., 15.30 val.
+        </p>
+      </div>
+      <Image
+        src={heroIllustration}
+        alt="Iliustracija - žalio šiltnamio kontūras, gaubiantis Žagarės kraštovaizdį su balta raudonstoge bažnyčia, upe, tilteliu ir medžiais."
+        widths={[240, 320, 380, 700]}
+        sizes="(min-width: 1024px) 380px, (min-width: 768px) 320px, 240px"
+        class="order-1 md:order-1 justify-self-center md:justify-self-start w-[240px] md:w-[320px] lg:w-[380px] h-auto"
+        loading="eager"
+      />
+    </div>
+
+    <div
+      class="mt-14 md:mt-24 grid md:grid-cols-2 gap-x-10 lg:gap-x-20 gap-y-16 md:gap-y-0"
+    >
+      <article class="md:pr-6 lg:pr-10 flex flex-col">
+        <header>
+          <p class="meta mb-5">I. Informacija</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-ink"
+          >
+            Pažinti kraštą iš arti
+          </h2>
+        </header>
+
+        <div
+          class="mt-6 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft flex flex-col gap-4"
+        >
+          <p>
+            Žagarė - tai gyva aplinka, kurią geriausia pažinti judant pėsčiomis,
+            stebint kraštovaizdį, klausantis vietos pasakojimų ir ragaujant šio
+            krašto skonius.
+          </p>
+          <p>
+            Kviečiame į žygį, skirtą tiems, kurie nori kraštą pamatyti iš arti -
+            per asmeninį patyrimą, santykį su aplinka. Žygio metu jungsime
+            miesto architektūrą, gamtinį kraštovaizdį, senąsias žiemgalių
+            tradicijas ir dabarties maisto kultūrą.
+          </p>
+        </div>
+
+        <div class="mt-10">
+          <p class="meta mb-5">Žygio programa</p>
+          <ol class="divide-y divide-ink/10 border-t border-ink/15">
+            <li class="py-5">
+              <h3
+                class="font-display not-italic text-[clamp(1.1rem,1.7vw,1.3rem)] leading-[1.25] text-ink"
+              >
+                Pažintinis žygis po miestą su Alma Kančialskiene
+              </h3>
+              <p
+                class="mt-2.5 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft"
+              >
+                Žygį pradėsime vaikščiodami po Žagarę kartu su istorike Alma
+                Kančialskiene. Kalbėsimės apie miesto raidą, išlikusį paveldą ir
+                tai, kaip Žagarė kito bėgant laikui.
+              </p>
+            </li>
+            <li class="py-5">
+              <h3
+                class="font-display not-italic text-[clamp(1.1rem,1.7vw,1.3rem)] leading-[1.25] text-ink"
+              >
+                Atkarpa iki Žvelgaičio kalno: žiemgalių skoniai su Lina
+                Vaitekūniene
+              </h3>
+              <p
+                class="mt-2.5 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft"
+              >
+                Iš miesto maršrutas ves link Žvelgaičio kalno. Čia lauks
+                muziejininkės ir žolininkės Linos Vaitekūnienės edukacija.
+                Kalbėsime apie tai, ką valgė senieji Žiemgalos gyventojai, kaip
+                jų mityba atspindėjo ryšį su gamta ir kaip senosios maisto
+                tradicijos atsispindi mūsų šiandieninėje maisto kultūroje.
+              </p>
+            </li>
+            <li class="py-5">
+              <h3
+                class="font-display not-italic text-[clamp(1.1rem,1.7vw,1.3rem)] leading-[1.25] text-ink"
+              >
+                Krašto produktų degustacija
+              </h3>
+              <p
+                class="mt-2.5 font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft"
+              >
+                Po žygio sustosime pailsėti prie bendro stalo ir paragauti
+                vietinių Žagarės bei Joniškio krašto produktų.
+              </p>
+            </li>
+          </ol>
+        </div>
+
+        <div class="mt-10">
+          <p class="meta mb-5">Apie idėją</p>
+          <div
+            class="font-sans text-[14px] md:text-[15px] leading-[1.6] text-ink-soft flex flex-col gap-4"
+          >
+            <p>
+              Žagarės paveldas - tai visuma: miesto gatvės, Švėtės upė,
+              Žvelgaičio kalnas, vietos tradicijos ir čia gyvenantys žmonės.
+              Žygis leidžia visus šiuos elementus sujungti į vieną vientisą
+              patirtį.
+            </p>
+            <p>
+              „Žagarė for today“ - tai kvietimas judėti, pažinti ir pamatyti,
+              kad mažas miestas gali būti atviras, gyvas ir įdomus.
+            </p>
+          </div>
+        </div>
+
+        <p
+          class="mt-8 font-sans text-[13px] md:text-[14px] leading-[1.6] text-ink-soft"
+        >
+          Veiklos įgyvendinamos vykdant projektą „Šiltnamis“, kurį finansuoja
+          Joniškio rajono savivaldybė.
+        </p>
+
+        <dl
+          class="mt-8 md:mt-10 font-sans text-[15px] md:text-[16px] leading-[1.55] divide-y divide-ink/10 border-t border-ink/15"
+        >
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">data</dt>
+            <dd>Rugsėjo 20 d., 15.30 val.</dd>
+          </div>
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">pradžia</dt>
+            <dd>Žagarės miesto aikštė</dd>
+          </div>
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">kaina</dt>
+            <dd>nemokama</dd>
+          </div>
+          <div
+            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
+          >
+            <dt class="meta">liko vietų</dt>
+            <dd>
+              <span data-slots class="tabular-nums">-</span>
+            </dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="md:border-l border-ink/15 md:pl-10 lg:pl-16 flex flex-col">
+        <header>
+          <p class="meta mb-5">II. Registracija</p>
+          <h2
+            class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-brand-600"
+          >
+            Užsiregistruokite{" "}
+            <span class="italic text-ink">į žygį</span>
+          </h2>
+          <p
+            class="mt-3 font-sans text-[14px] md:text-[15px] leading-[1.55] text-ink-soft"
+          >
+            Ribotas dalyvių skaičius - registruokitės iš anksto.
+          </p>
+        </header>
+
+        <form data-form class="mt-8 md:mt-10 flex flex-col gap-7" novalidate>
+          <p
+            data-status
+            role="status"
+            aria-live="polite"
+            tabindex="-1"
+            class="hidden whitespace-pre-line border-l-2 pl-4 py-2 font-sans text-[15px] leading-[1.55] outline-none"
+          >
+          </p>
+
+          <div class="field flex flex-col gap-2">
+            <label for="name" class="meta">Vardas</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              maxlength="80"
+              autocomplete="name"
+              class="bg-transparent border-b border-ink/30 focus:border-ink outline-none py-2 font-sans text-[16px] text-ink placeholder:text-ink-soft/60 transition-colors"
+            />
+          </div>
+
+          <div class="field flex flex-col gap-2">
+            <label for="email" class="meta">El. paštas</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              maxlength="120"
+              autocomplete="email"
+              class="bg-transparent border-b border-ink/30 focus:border-ink outline-none py-2 font-sans text-[16px] text-ink placeholder:text-ink-soft/60 transition-colors"
+            />
+          </div>
+
+          <div class="hidden" aria-hidden="true">
+            <label for="website">Svetainė</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div
+            class="cf-turnstile"
+            data-sitekey={TURNSTILE_SITEKEY}
+            data-theme="light"
+            data-appearance="interaction-only"
+          >
+          </div>
+
+          <button
+            data-submit
+            type="submit"
+            class="mt-2 self-start font-mono text-[12px] uppercase tracking-[0.22em] bg-ink text-paper px-7 py-3.5 hover:bg-brand-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Registruotis
+          </button>
+        </form>
+
+        <div data-map class="mt-12 md:mt-auto md:pt-12">
+          <p class="meta mb-4">Susitikimo vieta</p>
+          <PointMap
+            client:only="react"
+            lat={LAT}
+            lng={LNG}
+            label="Žagarės miesto aikštė"
+          >
+            <div
+              slot="fallback"
+              class="h-[280px] md:h-[340px] border border-ink/30 flex items-center justify-center"
+            >
+              <p class="meta">Kraunamas žemėlapis...</p>
+            </div>
+          </PointMap>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    const ENDPOINT = "/api/registracija/zygis-po-zagare";
+
+    const form = document.querySelector<HTMLFormElement>("[data-form]");
+    const submitBtn = document.querySelector<HTMLButtonElement>("[data-submit]");
+    const statusEl = document.querySelector<HTMLParagraphElement>("[data-status]");
+    const slotsEls = document.querySelectorAll<HTMLElement>("[data-slots]");
+
+    const MESSAGES: Record<string, string> = {
+      ok: "Ačiū! Registracija priimta.\nLauksime Jūsų rugsėjo 20 d. 15.30 val. Žagarės miesto aikštėje.",
+      full: "Vietų nebeliko - registracija baigta.",
+      duplicate: "Šis el. paštas jau užregistruotas.",
+      invalid: "Patikrinkite vardą ir el. paštą.",
+      captcha: "Patvirtinkite, kad nesate robotas, ir bandykite dar kartą.",
+      error: "Įvyko klaida. Bandykite vėliau.",
+    };
+
+    // Turnstile tokens are single-use; reset the widget so a retry gets a fresh one.
+    function resetTurnstile() {
+      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+    }
+
+    function setStatus(text: string, kind: "ok" | "error" | "") {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+      statusEl.classList.remove(
+        "text-brand-600",
+        "border-brand-600",
+        "text-success",
+        "border-success",
+      );
+      if (!text) {
+        statusEl.classList.add("hidden");
+        return;
+      }
+      statusEl.classList.remove("hidden");
+      if (kind === "error") {
+        statusEl.classList.add("text-brand-600", "border-brand-600");
+      } else if (kind === "ok") {
+        statusEl.classList.add("text-success", "border-success");
+      }
+      // Bring feedback into view and announce it - it now sits above the fold
+      // of the form, but on mobile the button may be scrolled past it.
+      statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      statusEl.focus({ preventScroll: true });
+    }
+
+    function renderSlots(slotsLeft: number, full: boolean) {
+      slotsEls.forEach((el) => {
+        el.textContent = String(slotsLeft);
+      });
+      if (full) {
+        // No seats left: collapse the form to just the disabled button.
+        form
+          ?.querySelectorAll<HTMLElement>(".field, .cf-turnstile")
+          .forEach((el) => el.classList.add("hidden"));
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Vietų į žygį nebėra";
+        }
+      }
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await fetch(ENDPOINT, { headers: { accept: "application/json" } });
+        if (!res.ok) return;
+        const data = await res.json();
+        renderSlots(data.slotsLeft, data.full);
+      } catch {
+        // Availability is non-critical on load; form still submits.
+      }
+    }
+
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!submitBtn) return;
+
+      const fd = new FormData(form);
+      const name = String(fd.get("name") ?? "").trim();
+      const email = String(fd.get("email") ?? "").trim();
+      const website = String(fd.get("website") ?? "");
+      const token = String(fd.get("cf-turnstile-response") ?? "");
+
+      if (!name || !email) {
+        setStatus(MESSAGES.invalid, "error");
+        return;
+      }
+
+      if (!token) {
+        setStatus(MESSAGES.captcha, "error");
+        resetTurnstile();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      const original = submitBtn.textContent;
+      submitBtn.textContent = "Siunčiama...";
+      setStatus("", "");
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name, email, website, token }),
+        });
+        const data = await res.json().catch(() => ({ status: "error" }));
+        const msg = MESSAGES[data.status] ?? MESSAGES.error;
+
+        if (data.ok) {
+          if (typeof data.slotsLeft === "number") {
+            renderSlots(data.slotsLeft, data.slotsLeft === 0);
+          }
+          // Collapse the form to just the confirmation banner.
+          Array.from(form.children).forEach((el) => {
+            if (el !== statusEl) el.classList.add("hidden");
+          });
+          // Form no longer fills the column, so stop bottom-pinning the map
+          // (md:mt-auto) - let it sit right under the banner instead.
+          document
+            .querySelector("[data-map]")
+            ?.classList.remove("md:mt-auto", "md:pt-12");
+          setStatus(msg, "ok");
+        } else {
+          setStatus(msg, "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = original;
+          resetTurnstile();
+          if (data.status === "full") renderSlots(0, true);
+        }
+      } catch {
+        setStatus(MESSAGES.error, "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+        resetTurnstile();
+      }
+    });
+
+    loadStatus();
+  </script>
+</Layout>

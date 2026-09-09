@@ -7,9 +7,6 @@ import heroIllustration from "../assets/zygis-svete.webp";
 const siteOrigin = Astro.site!.toString().replace(/\/$/, "");
 const pageUrl = `${siteOrigin}/zygis-svete`;
 
-const TURNSTILE_SITEKEY =
-  import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? "1x00000000000000000000AA";
-
 const eventSchema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -25,20 +22,14 @@ const eventSchema = {
 ---
 
 <Layout
-  title="Žygis Švėtės dugnu - registracija | Žagarė for today"
-  description="Liepos 18 d. 12.00 val. - žygis Švėtės dugnu, brendant pačia upės vaga su gidu Žygimantu Ruškiu. Žygis nemokamas, būtina registracija."
+  title="Žygis Švėtės dugnu | Žagarė for today"
+  description="Liepos 18 d. 12.00 val. - žygis Švėtės dugnu, brendant pačia upės vaga su gidu Žygimantu Ruškiu. Žygis nemokamas, vietų nebėra."
 >
   <script
     type="application/ld+json"
     set:html={JSON.stringify(eventSchema).replace(/</g, "\\u003c")}
     is:inline
   />
-  <script
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-    async
-    defer
-    is:inline></script>
-
   <section class="relative px-5 md:px-8 pt-10 md:pt-16 pb-10 md:pb-20">
     <div
       class="grid md:grid-cols-[auto_1fr] items-center gap-8 md:gap-12 lg:gap-16"
@@ -138,14 +129,6 @@ const eventSchema = {
             <dt class="meta">kaina</dt>
             <dd>nemokama</dd>
           </div>
-          <div
-            class="grid grid-cols-[5.5rem_1fr] md:grid-cols-[6.5rem_1fr] gap-x-5 py-3.5 items-baseline"
-          >
-            <dt class="meta">liko vietų</dt>
-            <dd>
-              <span data-slots class="tabular-nums">-</span>
-            </dd>
-          </div>
         </dl>
       </article>
 
@@ -155,7 +138,7 @@ const eventSchema = {
           <h2
             class="font-display not-italic text-[clamp(1.4rem,2.4vw,1.9rem)] leading-[1.15] text-brand-600"
           >
-            Užsiregistruokite
+            Užsiregistruokite{" "}
             <span class="italic text-ink">į žygį</span>
           </h2>
           <p
@@ -165,69 +148,11 @@ const eventSchema = {
           </p>
         </header>
 
-        <form data-form class="mt-8 md:mt-10 flex flex-col gap-7" novalidate>
-          <p
-            data-status
-            role="status"
-            aria-live="polite"
-            tabindex="-1"
-            class="hidden whitespace-pre-line border-l-2 pl-4 py-2 font-sans text-[15px] leading-[1.55] outline-none"
-          >
-          </p>
-
-          <div class="field flex flex-col gap-2">
-            <label for="name" class="meta">Vardas</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              maxlength="80"
-              autocomplete="name"
-              class="bg-transparent border-b border-ink/30 focus:border-ink outline-none py-2 font-sans text-[16px] text-ink placeholder:text-ink-soft/60 transition-colors"
-            />
-          </div>
-
-          <div class="field flex flex-col gap-2">
-            <label for="email" class="meta">El. paštas</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              maxlength="120"
-              autocomplete="email"
-              class="bg-transparent border-b border-ink/30 focus:border-ink outline-none py-2 font-sans text-[16px] text-ink placeholder:text-ink-soft/60 transition-colors"
-            />
-          </div>
-
-          <div class="hidden" aria-hidden="true">
-            <label for="website">Svetainė</label>
-            <input
-              id="website"
-              name="website"
-              type="text"
-              tabindex="-1"
-              autocomplete="off"
-            />
-          </div>
-
-          <div
-            class="cf-turnstile"
-            data-sitekey={TURNSTILE_SITEKEY}
-            data-theme="light"
-            data-appearance="interaction-only"
-          >
-          </div>
-
-          <button
-            data-submit
-            type="submit"
-            class="mt-2 self-start font-mono text-[12px] uppercase tracking-[0.22em] bg-ink text-paper px-7 py-3.5 hover:bg-brand-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            Registruotis
-          </button>
-        </form>
+        <p
+          class="mt-8 md:mt-10 self-start font-mono text-[12px] uppercase tracking-[0.22em] bg-ink/45 text-paper px-7 py-3.5"
+        >
+          Vietų į žygį nebėra
+        </p>
 
         <div data-map class="mt-12 md:mt-auto md:pt-12">
           <p class="meta mb-4">Maršrutas</p>
@@ -244,144 +169,4 @@ const eventSchema = {
     </div>
   </section>
 
-  <script>
-    const ENDPOINT = "/api/zygis-svete";
-
-    const form = document.querySelector<HTMLFormElement>("[data-form]");
-    const submitBtn = document.querySelector<HTMLButtonElement>("[data-submit]");
-    const statusEl = document.querySelector<HTMLParagraphElement>("[data-status]");
-    const slotsEls = document.querySelectorAll<HTMLElement>("[data-slots]");
-
-    const MESSAGES: Record<string, string> = {
-      ok: "Ačiū! Registracija priimta.\nLauksime Jūsų liepos 18 d. 12.00 val. Uolos g. pabaigoje.",
-      full: "Vietų nebeliko - registracija baigta.",
-      duplicate: "Šis el. paštas jau užregistruotas.",
-      invalid: "Patikrinkite vardą ir el. paštą.",
-      captcha: "Patvirtinkite, kad nesate robotas, ir bandykite dar kartą.",
-      error: "Įvyko klaida. Bandykite vėliau.",
-    };
-
-    // Turnstile tokens are single-use; reset the widget so a retry gets a fresh one.
-    function resetTurnstile() {
-      (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
-    }
-
-    function setStatus(text: string, kind: "ok" | "error" | "") {
-      if (!statusEl) return;
-      statusEl.textContent = text;
-      statusEl.classList.remove(
-        "text-brand-600",
-        "border-brand-600",
-        "text-success",
-        "border-success",
-      );
-      if (!text) {
-        statusEl.classList.add("hidden");
-        return;
-      }
-      statusEl.classList.remove("hidden");
-      if (kind === "error") {
-        statusEl.classList.add("text-brand-600", "border-brand-600");
-      } else if (kind === "ok") {
-        statusEl.classList.add("text-success", "border-success");
-      }
-      // Bring feedback into view and announce it - it now sits above the fold
-      // of the form, but on mobile the button may be scrolled past it.
-      statusEl.scrollIntoView({ behavior: "smooth", block: "center" });
-      statusEl.focus({ preventScroll: true });
-    }
-
-    function renderSlots(slotsLeft: number, full: boolean) {
-      slotsEls.forEach((el) => {
-        el.textContent = String(slotsLeft);
-      });
-      if (full) {
-        // No seats left: collapse the form to just the disabled button.
-        form
-          ?.querySelectorAll<HTMLElement>(".field, .cf-turnstile")
-          .forEach((el) => el.classList.add("hidden"));
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Vietų į žygį nebėra";
-        }
-      }
-    }
-
-    async function loadStatus() {
-      try {
-        const res = await fetch(ENDPOINT, { headers: { accept: "application/json" } });
-        if (!res.ok) return;
-        const data = await res.json();
-        renderSlots(data.slotsLeft, data.full);
-      } catch {
-        // Availability is non-critical on load; form still submits.
-      }
-    }
-
-    form?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!submitBtn) return;
-
-      const fd = new FormData(form);
-      const name = String(fd.get("name") ?? "").trim();
-      const email = String(fd.get("email") ?? "").trim();
-      const website = String(fd.get("website") ?? "");
-      const token = String(fd.get("cf-turnstile-response") ?? "");
-
-      if (!name || !email) {
-        setStatus(MESSAGES.invalid, "error");
-        return;
-      }
-
-      if (!token) {
-        setStatus(MESSAGES.captcha, "error");
-        resetTurnstile();
-        return;
-      }
-
-      submitBtn.disabled = true;
-      const original = submitBtn.textContent;
-      submitBtn.textContent = "Siunčiama...";
-      setStatus("", "");
-
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ name, email, website, token }),
-        });
-        const data = await res.json().catch(() => ({ status: "error" }));
-        const msg = MESSAGES[data.status] ?? MESSAGES.error;
-
-        if (data.ok) {
-          if (typeof data.slotsLeft === "number") {
-            renderSlots(data.slotsLeft, data.slotsLeft === 0);
-          }
-          // Collapse the form to just the confirmation banner.
-          Array.from(form.children).forEach((el) => {
-            if (el !== statusEl) el.classList.add("hidden");
-          });
-          // Form no longer fills the column, so stop bottom-pinning the map
-          // (md:mt-auto) - let it sit right under the banner instead.
-          document
-            .querySelector("[data-map]")
-            ?.classList.remove("md:mt-auto", "md:pt-12");
-          setStatus(msg, "ok");
-        } else {
-          setStatus(msg, "error");
-          submitBtn.disabled = false;
-          submitBtn.textContent = original;
-          resetTurnstile();
-          if (data.status === "full") renderSlots(0, true);
-        }
-      } catch {
-        setStatus(MESSAGES.error, "error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = original;
-        resetTurnstile();
-      }
-    });
-
-    loadStatus();
-  </script>
 </Layout>
