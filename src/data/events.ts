@@ -31,7 +31,7 @@ export const EVENTS: EventItem[] = [
     dateLabel: "Rugsėjo 20 d., 15.30 val.",
     location: "Žagarės miesto aikštė",
     summary:
-      "Patirtinis žygis po miestą su istorike Alma Kančialskiene, žiemgalių skonių edukacija prie Žvelgaičio kalno ir krašto produktų degustacija. Nemokama, būtina registracija.",
+      "Patirtinis žygis po miestą su geografe Alma Kančelskiene, žiemgalių skonių edukacija prie Žvelgaičio kalno ir krašto produktų degustacija. Nemokama, būtina registracija.",
     image: zygisPoZagare,
     imageAlt:
       "Iliustracija - žalio šiltnamio kontūras, gaubiantis Žagarės kraštovaizdį su balta raudonstoge bažnyčia, upe, tilteliu ir medžiais.",
