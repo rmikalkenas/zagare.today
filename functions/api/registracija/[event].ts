@@ -22,9 +22,7 @@ type Ctx = {
  * match the page slug. Anything not listed here 404s, so a stale or guessed
  * URL cannot create keys.
  */
-const EVENTS: Record<string, { max: number }> = {
-  "zygis-po-zagare": { max: 30 },
-};
+const EVENTS: Record<string, { max: number }> = {};
 
 const MAX_NAME = 80;
 const MAX_EMAIL = 120;
